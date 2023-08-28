@@ -373,8 +373,6 @@ ses-01
         ├── sub-pilot_ses-01_task-rest_physio.json
         └── sub-pilot_ses-01_task-rest_physio.tsv.gz
 ```
-
-
 ### Incorporate into version control with DataLad
 
 !!!info "Initiating the version-controled dataset"
@@ -382,3 +380,8 @@ ses-01
     Once at the beginning of the project, the datalad dataset will be created:
 
     - [ ] Add stockage horus as an SSH remote.
+
+### Run MRIQC on the data and assess their quality
+
+Proceed with the quality assessment of the data by following the steps detailed in the [next section](./mriqc.md).
+Checking the quality of the data short after they are acquired increases the likelihood of catching systematic artifacts and reduces the risk of the latter spreading throughout the whole dataset. It also spreads the burden of visual inspection over time, avoiding to overwhelm the rater with lots of images to rate in a short time span, which in turn reduces decision fatigue.
