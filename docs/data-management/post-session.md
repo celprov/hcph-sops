@@ -374,11 +374,53 @@ ses-01
         └── sub-pilot_ses-01_task-rest_physio.tsv.gz
 ```
 
-
 ### Incorporate into version control with DataLad
 
 !!!info "Initiating the version-controled dataset"
 
-    Once at the beginning of the project, the datalad dataset will be created:
+    Once at the beginning of the project, the DataLad[1] dataset will be created:
 
     - [ ] Add stockage horus as an SSH remote.
+    - [ ] The preprocessing will be executed on an HPC. If datalad is not installed on the HPC, the most convenient user-based installation can be achieved by using Conda. 
+
+        !!!warning "Do not run the installation of Conda and DataLad in the login node"
+            I remind you that the login node is a shared resource meant for users to log in, submit jobs, and manage their workflows. It is recommended to use the login node only for tasks related to job submission, data management, and preparing job scripts. Indeed, running resource-intensive tasks or building containers on the login node can negatively impact the overall performance and responsiveness of the system for all users. Instead, open an interactive session in SLURM using the command below. You will need an interactive session to read the license and accept it.
+            ```
+            srun --nodes=1 --ntasks-per-node=1 --time=01:00:00 --pty bash -i
+            ```
+
+        Run the three lines of code below to install Conda and install DataLad.
+        ```
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        bash Miniconda3-latest-Linux-x86_64.sh
+        conda install -c conda-forge datalad
+        conda install -c conda-forge datalad-container
+        ```
+        
+        !!!info "Cannot call DataLad"
+            If calling DataLad returns the following error `ImportError: cannot import name 'getargspec' from 'inspect' (/home/users/cprovins/miniconda3/lib/python3.11/inspect.py)`. You can resolve this dependency issue by creating a Conda environment with a lower version of Python.
+            ```
+            conda create -n "datalad" python=3.8
+            conda activate datalad
+            ```
+
+    - [ ] Next, don't forget to configure the Git identity.
+        ```
+        cd ~
+        git config --global --add user.name "Bob McBobFace"
+        git config --global --add user.email bob@example.com
+        ```
+    - [ ] Go in the repository where you usually store datasets and create an empty DataLad dataset by running:
+        ```
+        cd /data/datasets/
+        datalad create -c yoda "hcph"
+        ```
+        Using the `yoda` procedure builds the infrastructure of your dataset so it is compliant to the [Yoda principles](https://handbook.datalad.org/en/latest/basics/101-127-yoda.html).
+
+- [ ] Move the data into the DataLad dataset and save the files in the dataset history (thus starting to the version-control mechanism) using the command below. Replace "session_id" with the number of the session:
+    ```
+    datalad save -m "add ses-{session_id}"
+    ```
+## References
+[1]: Hanke, Michael, Yaroslav O. Halchenko, Benjamin Poldrack, Kyle Meyer, Debanjum Singh Solanky, Gergana Alteva, Jason Gors, et al. “Datalad/Datalad: ## 0.14.0 (February 02, 2021).” Zenodo, February 2, 2021. <https://doi.org/10.5281/zenodo.4495661.>
+
