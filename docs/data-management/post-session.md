@@ -402,7 +402,7 @@ ses-01
             ````
         - [ ] Install DataLad:
             ``` bash
-            conda install -c conda-forge datalad
+            conda install -c conda-forge -y "datalad>=0.19.0"
             conda install -c conda-forge datalad-container
             ```
         - [ ] Next, don't forget to configure the Git identity.
@@ -410,18 +410,7 @@ ses-01
             git config --global --add user.name "Bob McBobFace"
             git config --global --add user.email bob@example.com
             ```
-
-        !!! warning "DataLad"
-
-            If calling DataLad returns the following error:
-                ``` bash
-                ImportError: cannot import name 'getargspec' from 'inspect' (/home/users/cprovins/miniconda3/lib/python3.11/inspect.py)`.
-                ```
-            You can resolve this dependency issue by creating a Conda environment with a lower version of Python.
-                ``` bash
-                conda create -n "datalad" python=3.8
-                conda activate datalad
-                ```
+        
     - [ ] Go in the repository where you usually store datasets and create an empty DataLad dataset by running:
         ```
         cd /data/datasets/
