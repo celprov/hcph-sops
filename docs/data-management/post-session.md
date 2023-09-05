@@ -378,7 +378,7 @@ ses-01
 
 !!!info "Initiating the version-controled dataset"
 
-    Once at the beginning of the project, the DataLad[1] dataset will be created:
+    Once at the beginning of the project, the DataLad [1] dataset will be created:
 
     - [ ] Add stockage horus as an SSH remote.
     - [ ] The preprocessing will be executed on an HPC. If datalad is not installed on the HPC, the most convenient user-based installation can be achieved by using Conda. 
@@ -399,7 +399,7 @@ ses-01
             ``` bash
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
             bash Miniconda3-latest-Linux-x86_64.sh
-            ````
+            ```
         - [ ] Install DataLad:
             ``` bash
             conda install -c conda-forge -y "datalad>=0.19.0"
