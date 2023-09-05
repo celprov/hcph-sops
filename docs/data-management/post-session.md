@@ -378,13 +378,13 @@ ses-01
 
 !!!info "Initiating the version-controled dataset"
 
-    Once at the beginning of the project, the DataLad [1] dataset will be created:
+    Once at the beginning of the project, the DataLad [1] dataset should be created. In case, the preprocessing will be executed on an HPC, check out the foldable admonition for tips on how to install DataLad on the HCP.  
 
-    - [ ] Add stockage horus as an SSH remote.
-    - [ ] The preprocessing will be executed on an HPC. If datalad is not installed on the HPC, the most convenient user-based installation can be achieved by using Conda. 
+    ??? tip "Installing DataLad with Conda"
+        If datalad is not installed on the HPC, the most convenient user-based installation can be achieved by using Conda.
 
-        ??? tip "Execution within High Performance Computing (HPC)"
-        
+        !!! tip "Execution within High Performance Computing (HPC)"
+    
             HPC systems typically recommend using their login nodes only for tasks related to job submission, data management, and preparing job scripts.
             Therefore, the execution of resource-intensive tasks such as *fMRIPrep* or building containers on login nodes can negatively impact the overall performance and responsiveness of the system for all users.
             Interactive sessions are a great alternative when available.
@@ -393,8 +393,6 @@ ses-01
             srun --nodes=1 --ntasks-per-node=1 --time=01:00:00 --pty bash -i
             ```
 
-    ??? tip "Installing DataLad with Conda"
-    
         - [ ] Install some conda distribution (in this example we show *Miniconda*):
             ``` bash
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
