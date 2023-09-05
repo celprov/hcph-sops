@@ -430,5 +430,6 @@ ses-01
     ```
 
 ## References
-[1]: Hanke, Michael, Yaroslav O. Halchenko, Benjamin Poldrack, Kyle Meyer, Debanjum Singh Solanky, Gergana Alteva, Jason Gors, et al. “Datalad/Datalad: ## 0.14.0 (February 02, 2021).” Zenodo, February 2, 2021. <https://doi.org/10.5281/zenodo.4495661.>
+[1]: Halchenko, Yaroslav O., Kyle Meyer, Benjamin Poldrack, Debanjum Singh Solanky, Adina S. Wagner, Jason Gors, Dave MacFarlane, et al. “DataLad: Distributed System for Joint Management of Code, Data, and Their Relationship.” Journal of Open Source Software 6, no. 63 (July 1, 2021): 3262. <https://doi.org/10.21105/joss.03262>.
+
 
