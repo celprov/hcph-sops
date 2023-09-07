@@ -378,36 +378,49 @@ ses-01
 
 !!!info "Initiating the version-controled dataset"
 
-    Once at the beginning of the project, the DataLad [1] dataset should be created. In case, the preprocessing will be executed on an High Performance Computing (HPC), check out the foldable admonition for tips on how to install DataLad on the HCP.  
+    Once at the beginning of the project, the DataLad [1] dataset should be created. In case, the preprocessing will be executed on an High Performance Computing (HPC), check out the foldable admonition for tips on how to install DataLad on the HCP.
+
+    ??? warning "Do not install DataLad on a login node"
+        HPC systems typically recommend using their login nodes only fortasks related to job submission, data management, and preparing jobscripts.
+        Therefore, the execution of resource-intensive tasks such as*fMRIPrep* or building containers on login nodes can negativelyimpact the overall performance and responsiveness of the system forall users.
+        Interactive sessions are a great alternative when available and **should** be used when creating the DataLad dataset.
+        For example, in the case of systems operating SLURM, the followingcommand would open a new interactive session:
+        ``` bash
+        srun --nodes=1 --ntasks-per-node=1 --time=01:00:00 --pty bash -i
+        ```
 
     ??? tip "Installing DataLad"
-        If datalad is not installed on the HPC, the most convenient user-based installation can be achieved by using `pip install --user datalad`.
-
-        ??? warning "Do not install DataLad on a login node"
-    
-            HPC systems typically recommend using their login nodes only for tasks related to job submission, data management, and preparing job scripts.
-            Therefore, the execution of resource-intensive tasks such as *fMRIPrep* or building containers on login nodes can negatively impact the overall performance and responsiveness of the system for all users.
-            Interactive sessions are a great alternative when available and **should** be used when creating the DataLad dataset.
-            For example, in the case of systems operating SLURM, the following command would open a new interactive session:
-            ``` bash
-            srun --nodes=1 --ntasks-per-node=1 --time=01:00:00 --pty bash -i
-            ```
+        If datalad is not installed on the HPC, the most convenient user-based installation can be achieved by using Conda.
 
         - [ ] Start an interactive session on the HPC server
-        - [ ] Load python if it is not available (here we use `module`):
-            - [ ] Check the dependencies for your specific python version (here `3.8.2`):
-            ``` bash
-            module spider Python/3.8.2
-            ```
-            - [ ] Load python along with its dependencies (`ml` is equivalent to `module load`)
-            ``` bash
-            ml GCCcore/9.3.0 Python/3.8.2
-            ```
-        - [ ] Now that `pip` is installed, install DataLad:
-            ``` bash
-            pip install --user datalad
-            ```
-        - [ ] Next, don't forget to configure the Git identity.
+
+        ??? tip "Installing with `pip`"
+            - [ ] Load python if it is not available (here we use `module`):
+                - [ ] Check the dependencies for your specific python version (here `3.8.2`):
+                ``` bash
+                module spider Python/3.8.2
+                ```
+                - [ ] Load python along with its dependencies (`ml` is equivalent to `module load`)
+                ``` bash
+                ml GCCcore/9.3.0 Python/3.8.2
+                ```
+            - [ ] Now that `pip` is installed, install DataLad:
+                ``` bash
+                pip install --user datalad
+                ```
+        
+        ???+ tip "Installing with `conda`"
+            - [ ] Install some conda distribution (in this example we show *Miniconda*):
+                ``` bash
+                wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+                bash Miniconda3-latest-Linux-x86_64.sh
+                ```
+            - [ ] Install DataLad:
+                ``` bash
+                conda install -c conda-forge -y "datalad>=0.19.0"
+                conda install -c conda-forge datalad-container
+                ```
+        - [ ] Finally, don't forget to configure the Git identity.
             ``` bash
             git config --global --add user.name "Bob McBobFace"
             git config --global --add user.email bob@example.com
