@@ -5,12 +5,15 @@ mri:
     dwi: '##min ##s'
     func_rest: '20min 6s'
     func_bht: '5min 41s'
-    func_pct: '2min 38s'
+    func_qct: '2min 38s'
 
 psychopy:
   tasks:
     dwi: '`dwi.psyexp`'
     func_rest: '`task-rest_bold.psyexp`'
     func_bht: '`task-bht_bold.psyexp`'
-    func_pct: '`task-pct_bold.psyexp`'
+    func_qct: '`task-qct_bold.psyexp`'
 
+paths:
+  sourcedata: '/data/datasets/hcph-sourcedata'
+  pilot_sourcedata: '/data/datasets/hcph-pilot-sourcedata'

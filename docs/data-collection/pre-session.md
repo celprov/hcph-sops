@@ -34,7 +34,7 @@ Instructions of operations to be performed before the participant arrival, **bef
     - [ ] {{ settings.psychopy.tasks.func_bht }} (breath-holding task, BHT):
         - [ ] time it to [confirm the length](intro.md#task-timing), and
         - [ ] check that the movie is played.
-    - [ ] {{ settings.psychopy.tasks.func_pct }} (positive-control task, PCT):
+    - [ ] {{ settings.psychopy.tasks.func_qct }} (quality-control task, QCT):
         - [ ] time it to [confirm the length](intro.md#task-timing), and
         - [ ] check that the movie is played.
 

@@ -83,7 +83,7 @@
     !!! warning "While you are still running the MPRAGE sequence"
         - [ ] Open the parameters of the sequence named `fmap-phasediff__gre` and ensure that under *Contrast* ⤷ *Reconstruction* the option *Magnitude et phase* is selected. This is crucial so that both the magnitude and the phase difference field map images are saved.
         - [ ] Repeat the configuration of *Magnitude et phase* for all sequences name `fmap-epi_acq-bold_dir-{RL,LR,PA,AP}__*`.
-        - [ ] Repeat the configuration of *Magnitude et phase* for all sequences name `func-bold_task-{bht,pct,rest}_dir-{RL,LR,PA,AP}__cmrr_me4_sms4`.
+        - [ ] Repeat the configuration of *Magnitude et phase* for all sequences name `func-bold_task-{bht,qct,rest}_dir-{RL,LR,PA,AP}__cmrr_me4_sms4`.
         - [ ] Open the `dwi-dwi_dir-{RL,LR,PA,AP}__279dir_monopolar` sequence and under the section *Diff.*, uncheck all the derivatives except for *Diff. Weighted Image*.
 
 ## Acquire the diffusion MRI run
@@ -130,9 +130,9 @@
     - [ ] Verify that in the next sequence parameters under *Contrast>Reconstruction* the option *Magnitude et phase* is selected!
 - [ ] Launch the BOLD-EPI sequence `fmap-epi_acq-bold_dir-{RL,LR,PA,AP}__cmrr_me4_sms4` for *B<sub>0</sub>* field mapping by pressing *Continue* :fontawesome-solid-play:{ .redcolor }.
 - [ ] While the fieldmap sequence is running,
-    - [ ] [Adjust the FoV](scanning-notes.md#setting-the-fov) for the positive-control-task (`func-bold_task-pct_dir-{RL,LR,PA,AP}__cmrr_me4_sms4`) fMRI sequence following the abovementioned steps, and
-    - [ ] verify the *Number of measurements* with respect to the [task's timing](intro.md#task-timing) ({{ settings.mri.timings.func_pct }}).
-    - [ ] Verify that the positive-control task {{ settings.psychopy.tasks.func_pct }} is open in psychopy, that you calibrated the ET.
+    - [ ] [Adjust the FoV](scanning-notes.md#setting-the-fov) for the positive-control-task (`func-bold_task-qct_dir-{RL,LR,PA,AP}__cmrr_me4_sms4`) fMRI sequence following the abovementioned steps, and
+    - [ ] verify the *Number of measurements* with respect to the [task's timing](intro.md#task-timing) ({{ settings.mri.timings.func_qct }}).
+    - [ ] Verify that the positive-control task {{ settings.psychopy.tasks.func_qct }} is open in psychopy, that you calibrated the ET.
 
 ## Acquire the functional MRI block
 - [ ] Inform the participant about the fMRI block
@@ -153,9 +153,9 @@
 
 - [ ] Wait for confirmation, respond to follow-up comments, and [initiate the ET calibration (instructions below)](scanning-notes.md#eye-tracker-calibration)
 
-### Positive-control task (PCT)
+### Quality-control task (QCT)
 - [ ] Verify that the task's program is awaiting the scanner's trigger to start.
-- [ ] Inform the participant that we will proceed with the positive control task (PCT). Repeat task instructions.
+- [ ] Inform the participant that we will proceed with the quality-control task (QCT). Repeat task instructions.
 
     ???+ quote "Starting the positive control task"
         Hey [NAME], thanks for your collaboration with the eye tracking calibration.
@@ -170,7 +170,7 @@
 
         Before we start, please leave the alarm button on your tummy to free your hand for finger tapping. Please do not hesitate to grab it in case you need to squeeze it.
 
-- [ ] Launch the `func-bold_task-pct_dir-{RL,LR,PA,AP}__cmrr_me4_sms4` protocol by pressing *Continue* :fontawesome-solid-play:{ .redcolor }.
+- [ ] Launch the `func-bold_task-qct_dir-{RL,LR,PA,AP}__cmrr_me4_sms4` protocol by pressing *Continue* :fontawesome-solid-play:{ .redcolor }.
 - [ ] Wait for the calibration scans to be finished (the process is reported on the bottom left corner of the console) and verify that the first volume's trigger signal was received by *{{ secrets.hosts.psychopy | default("███") }}* (meaning **CHECK that the task program was initiated**).
 - [ ] While it is running:
     - [ ] [Adjust the FoV](scanning-notes.md#setting-the-fov) for the following sequence,

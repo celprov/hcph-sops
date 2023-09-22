@@ -63,7 +63,7 @@
         Other times it will be fixed on the center, and have a blank gray background or a flickering or grating circular area behind it.
         The last element of this block will show the words LEFT or RIGHT.
         When either appears, please tap your thumb on each of the your other four fingers of the hand designated by the word, sequentially with all fingers and reversing the direction at the extremes (your pointer and your pinkie).
-        This positive-control task has a length of {{ settings.mri.timings.func_pct }}.
+        This positive-control task has a length of {{ settings.mri.timings.func_qct }}.
         During this task, please leave the alarm button on your tummy, where you can recover it when it finishes.
 
         Then there is a long block of {{ settings.mri.timings.func_rest }} that we call *resting* state.
@@ -260,9 +260,9 @@
 
 Please note that some of the images used in this section are sourced from the [Eye Tracker Instruction Manual](../assets/files/EL1000Plus_UserManual_1.0.20_GOP.pdf).
 
-!!! warning "To ensure accurate performance and prevent minor drifts in the pupil and CR thresholds, perform the ET Setup 10-15 minutes after powering the ET on."
+!!! warning "To ensure accurate performance and prevent minor drifts in the pupil and corneal reflection (CR) thresholds, perform the ET Setup 10-15 minutes after powering the ET on."
 
-- [ ] Open the PCT experiment in *Psychopy* (`task-pct_bold.psyexp` file).
+- [ ] Open the QCT experiment in *Psychopy* (`task-qct_bold.psyexp` file).
     - [ ] Run the experiment by pressing the green play button.
     - [ ] Press enter to begin the *camera setup mode*.
     - [ ] The camera setup mode contains a view of one eye, and you can switch that view between two modes: one is the field-of-view of the ET, the second is an automatic zoom on the eye itself (or a random part if the eye is not visible).

@@ -38,7 +38,7 @@
 
 ## Eye-Tracker Calibration Process
 
-- [ ] On the eye-tracking (ET) computer, ensure that the appropriate calibration type is selected (9-point for PCT and 5-point for resting state and breath-holding tasks):
+- [ ] On the eye-tracking (ET) computer, ensure that the appropriate calibration type is selected (9-point for QCT and 5-point for resting state and breath-holding tasks):
     - [ ] Click on <span class="keypress">Set Options</span> located on the right side of ET computer screen.
     - [ ] Under **Calibration type** in the top left corner, choose the image containing either 9 or 5 points.
 

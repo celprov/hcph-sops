@@ -68,7 +68,7 @@ The above graph can be broken down as follows:
     The ET **is NOT connected to the BIOPAC**, with the implication that the ET data is not stored with the other physiological information.
 1. **Stimuli presentation laptop**.
     The *Psychopy laptop* ({{ secrets.hosts.psychopy | default("███") }}) has the *Psychopy* software install and with it, the task programs are executed.
-    This experiment consists of three tasks: breath-holding task (*BHT*), resting-state fMRI (*rest*), and a positive-control task (*PCT*).
+    This experiment consists of three tasks: breath-holding task (*BHT*), resting-state fMRI (*rest*), and a quality-control task (*QCT*).
     This laptop also stores the data recorded by the ET at the end of the experiment.
 1. **Physiology recording laptop**.
     The *AcqKnowledge laptop* ({{ secrets.hosts.acqknowledge | default("███") }}) runs the BIOPAC's *AcqKnowledge* software and with it, this computer records the signals and allows visualization of the data coming from the BIOPAC.
@@ -169,6 +169,6 @@ Most of what is described in the present SOPs addresses the *Reliability Imaging
     The lengths of the four *Psychopy experiments* should be:
 
     * {{ settings.psychopy.tasks.dwi }} ➜ <mark>**{{ settings.mri.timings.dwi }}**</mark>,
-    * {{ settings.psychopy.tasks.func_pct }} ➜ <mark>**{{ settings.mri.timings.func_pct }}**</mark>,
+    * {{ settings.psychopy.tasks.func_qct }} ➜ <mark>**{{ settings.mri.timings.func_qct }}**</mark>,
     * {{ settings.psychopy.tasks.func_rest }} ➜ <mark>**{{ settings.mri.timings.func_rest }}**</mark>, and
     * {{ settings.psychopy.tasks.func_bht }} ➜ <mark>**{{ settings.mri.timings.func_bht }}**</mark>.

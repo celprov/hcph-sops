@@ -14,9 +14,9 @@ Once finalized the protocol design, it will be *frozen* and it cannot be changed
 
 - [ ] Update the *Number of measurements* in all `func-bold_task-*` sequences, according to the [previously recorded timings](intro.md#task-timing):
 
-    $$N_\text{measurements} = L_t / \text{TR}, \quad t \in \{\text{bht}, \text{pct}, \text{rest}\},$$
+    $$N_\text{measurements} = L_t / \text{TR}, \quad t \in \{\text{bht}, \text{qct}, \text{rest}\},$$
 
-    where $L_t$ is the length of a particular task $t$ (either BHT, PCT, or resting state) in seconds as timed before, and
+    where $L_t$ is the length of a particular task $t$ (either BHT, QCT, or resting state) in seconds as timed before, and
     $\text{TR}$ is the **repetition time** of the BOLD sequence, in seconds.
 
 - [ ] Save the protocol
@@ -136,7 +136,7 @@ This block describes how to prepare a laptop with a running *Psychopy 3* install
     pip3 install -e .
     ```
 - [ ] Open Psychopy, open the experiment-files corresponding to each task:
-    - [ ] {{ settings.psychopy.tasks.func_pct }} (positive-control task, PCT) :
+    - [ ] {{ settings.psychopy.tasks.func_qct }} (positive-control task, QCT) :
         - [ ] time it to confirm the length, and
         - [ ] check the task runs properly.
     - [ ] {{ settings.psychopy.tasks.func_rest }} (resting-state fMRI):

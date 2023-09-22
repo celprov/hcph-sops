@@ -21,6 +21,7 @@ nav:
       - Session tear-down: data-collection/tear-down.md
       - Emergency procedures: data-collection/emergency-procedures.md
     - Data management:
+      - Before data acquisition (storage preparation): data-management/preliminary.md
       - Post-session retrieval and BIDS: data-management/post-session.md
       - QC of unprocessed data: data-management/mriqc.md
     - Preprocessing: preprocessing.md
@@ -61,6 +62,7 @@ plugins:
       output_path: pdf/documentation.pdf
 
 markdown_extensions:
+  - abbr
   - admonition
   - attr_list
   - footnotes
@@ -70,10 +72,14 @@ markdown_extensions:
       generic: true
   - pymdownx.details
   - pymdownx.highlight:
+      use_pygments: true
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-  - pymdownx.snippets
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      auto_append:
+        - include/abbreviations.md
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -82,7 +88,8 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
       clickable_checkbox: true
