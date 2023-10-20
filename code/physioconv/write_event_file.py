@@ -298,10 +298,8 @@ def write_event_file_from_log(log: str) -> None:
         trigger_timestamp = float(re.findall(trigger_pattern, file)[0])
 
         # Create a regular expression pattern to match lines containing any of the word corresponding to tasks
-        autodraw_pattern = (
-            r"(\d+\.\d+)[^\n]+({})\s*:\s*autoDraw\s*=\s*(True|False)".format(
-                "|".join(TRIAL_TYPE.keys())
-            )
+        autodraw_pattern = r"([\d.]+)\s+EXP\s+({}):\s+autoDraw\s*=\s*(\w+)".format(
+            "|".join(TRIAL_TYPE.keys())
         )
 
         # Use re.findall to find all matching lines in the log
@@ -333,8 +331,10 @@ def write_event_file_from_log(log: str) -> None:
                     if trial_type == "mot":
                         # Which hand is instructed to fingertap is encoded in the psychopy log one line above
                         # the onset 'ft_hand : autoDraw = True' and as the same timestamp as the onset.
-                        hand_pattern = r"{:.4f}\s+EXP\s+ft_hand:\s*text\s*=\s*\'(RIGHT|LEFT)\'".format(
-                            onset
+                        hand_pattern = (
+                            r"{:.4f}\s+EXP\s+ft_hand:\s*text\s*=\s*\'(RIGHT|LEFT)\'".format(
+                                onset
+                            )
                         )
                         hand_match = re.search(hand_pattern, file)
                         value = hand_match.group(1).lower()
@@ -363,9 +363,8 @@ def write_event_file_from_log(log: str) -> None:
                         # Find all the matches using the regular expression
                         fix_pos_pattern = r"([\d.]+)\s+EXP\s+New trial \(rep=\d+, index=\d+\): OrderedDict\(\[\(\'xpos\', (-?\d+\.\d+)\), \(\'ypos\', (-?\d+\.\d+)\)\]\)"
                         matches = re.findall(fix_pos_pattern, previous_lines_text)
-                        # There should be only one match, otherwise we risk mixing up different instances
-                        assert len(matches) == 1
-                        timestamp, xpos, ypos = matches[0]
+                        #If the patterns is found several times, the last appearance is the one corresponding to the event
+                        timestamp, xpos, ypos = matches[-1]
                         value = f"[{xpos}, {ypos}]"
 
                     # If no trigger were recorded in the psychopy log, we need to approximate its timestamp
@@ -376,24 +375,20 @@ def write_event_file_from_log(log: str) -> None:
                             trigger_timestamp = onset
                         elif keyword in ["blank", "cog", "mot", "cog"]:
                             # The closest event for qct is "EXP 	eyetracker.clearEvents()"
-                            trigger_pattern = (
-                                r"(\d+\.\d+)\s+EXP\s+eyetracker.clearEvents()"
-                            )
-                            trigger_timestamp = re.findall(trigger_pattern, file)[0]
+                            trigger_pattern = r"(\d+\.\d+)\s+EXP\s+eyetracker.clearEvents()"
+                            trigger_timestamp = float(re.findall(trigger_pattern, file)[0])
                         else:
                             # The closest event for bht is "EXP  text_2: autoDraw = False"
-                            trigger_pattern = (
-                                r"(\d+\.\d+)\s+EXP\s+text_2: autoDraw = False"
-                            )
-                            trigger_timestamp = re.findall(trigger_pattern, file)[0]
+                            trigger_pattern = r"(\d+\.\d+)\s+EXP\s+text_2: autoDraw = False"
+                            trigger_timestamp = float(re.findall(trigger_pattern, file)[0])
 
                     # Subtract the timestamp of the first trigger to the onset of the task to get events
                     # onset in the fMRI recording time.
                     onset = onset - trigger_timestamp
 
                     # Keep only 1 decimal of precision
-                    onset = round(onset, 1)
-                    duration = round(duration, 1)
+                    onset = "{:.1f}".format(round(onset, 1))
+                    duration = "{:.1f}".format(round(duration, 1))
 
                     # We have all the information needed for the event, it can be inserted in the dataframe.
                     event = {
@@ -416,7 +411,7 @@ def write_event_file_from_log(log: str) -> None:
         # The from_log might break the BIDS compatibility, but for now I don't know how else
         # to distinguish between events.tsv generated from the channels versus the psychopy log
         output_file = os.path.join(
-            output_folder, base_name.replace("_physio.tsv.gz", "_from_log_events.tsv")
+            output_folder, base_name.replace(".log", "_from_log_events.tsv")
         )
         event_dataframe.to_csv(output_file, sep="\t", index=False)
         return event_dataframe
