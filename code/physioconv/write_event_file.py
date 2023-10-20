@@ -50,17 +50,16 @@ TRIAL_TYPE = {
     "movie": "movie",
     "polygon_4": "breath-in",
     "polygon_5": "breath-out",
-    "polygon_6":"breath-in-last",
+    "polygon_6": "breath-in-last",
     "polygon_8": "breath-out-last",
-    "polygon_7": "breath-out-last",   
+    "polygon_7": "breath-out-last",
 }
 
 
 class PatternNotFoundError(Exception):
     def __init__(self, pattern, log):
         super().__init__(
-            f"The pattern {pattern} was not found in the log. Please check that the input {log} is a log output by Psychopy and that it
-            does not correspond to a task that was aborted."
+            f"The pattern {pattern} was not found in the log. Please check that the input {log} is a log output by Psychopy and that it does not correspond to a task that was aborted."
         )
 
 
@@ -294,8 +293,16 @@ def write_event_file_from_log(log: str) -> None:
             columns=["onset", "duration", "trial-type", "value"]
         )
 
+        # Find the timestamp of the first trigger aka the beginning of fMRI recording
+        trigger_pattern = r"([\d.]+)\s+DATA\s+Keypress:\s+s"
+        trigger_timestamp = float(re.findall(trigger_pattern, file)[0])
+
         # Create a regular expression pattern to match lines containing any of the word corresponding to tasks
-        autodraw_pattern = r'(\d+\.\d+)[^\n]+({})\s*:\s*autoDraw\s*=\s*(True|False)'.format('|'.join(TRIAL_TYPE.keys()))
+        autodraw_pattern = (
+            r"(\d+\.\d+)[^\n]+({})\s*:\s*autoDraw\s*=\s*(True|False)".format(
+                "|".join(TRIAL_TYPE.keys())
+            )
+        )
 
         # Use re.findall to find all matching lines in the log
         autodraw_events = re.findall(autodraw_pattern, file)
@@ -323,43 +330,84 @@ def write_event_file_from_log(log: str) -> None:
                     # For the fingertapping and the eye movement sub-tasks, we have to encode which hand or the position
                     # of the fixation point to fully characterize the sub-task instance.
                     value = ""
-                    if trial_type == 'mot':
-                        # Which hand is instructed to fingertap is encoded in the psychopy log one line above 
+                    if trial_type == "mot":
+                        # Which hand is instructed to fingertap is encoded in the psychopy log one line above
                         # the onset 'ft_hand : autoDraw = True' and as the same timestamp as the onset.
-                        hand_pattern = r'{:.4f}\s+EXP\s+ft_hand:\s*text\s*=\s*\'(RIGHT|LEFT)\''.format(onset)
+                        hand_pattern = r"{:.4f}\s+EXP\s+ft_hand:\s*text\s*=\s*\'(RIGHT|LEFT)\'".format(
+                            onset
+                        )
                         hand_match = re.search(hand_pattern, file)
                         value = hand_match.group(1).lower()
 
-                    elif trial_type == 'cog':
-                        # The position of the point is reported in the psychopy log 5 to 7 lines above 
-                        # the onset event of the cognitive instance. 
+                    elif trial_type == "cog":
+                        # The position of the point is reported in the psychopy log 5 to 7 lines above
+                        # the onset event of the cognitive instance.
 
                         # Retrieve line number corresponding to the onset event
-                        pattern = r'{:.4f}\s+EXP\s+{}:\s+autoDraw\s*=\s*True'.format(onset, keyword)
+                        pattern = r"{:.4f}\s+EXP\s+{}:\s+autoDraw\s*=\s*True".format(
+                            onset, keyword
+                        )
                         match = re.search(pattern, file)
-                        start, end = match.span()  # Get the start and end position of the match
-                        line_nbr = file.count('\n', 0, start) + 1  # Calculate the corresponding line number
+                        (
+                            start,
+                            end,
+                        ) = match.span()  # Get the start and end position of the match
+                        line_nbr = (
+                            file.count("\n", 0, start) + 1
+                        )  # Calculate the corresponding line number
 
                         # Extract the seven lines before the match
-                        previous_lines = file.split('\n')[line_nbr-7:line_nbr]
-                        previous_lines_text = '\n'.join(previous_lines)
+                        previous_lines = file.split("\n")[line_nbr - 7 : line_nbr]
+                        previous_lines_text = "\n".join(previous_lines)
 
                         # Find all the matches using the regular expression
-                        fix_pos_pattern = r'([\d.]+)\s+EXP\s+New trial \(rep=\d+, index=\d+\): OrderedDict\(\[\(\'xpos\', (-?\d+\.\d+)\), \(\'ypos\', (-?\d+\.\d+)\)\]\)'
+                        fix_pos_pattern = r"([\d.]+)\s+EXP\s+New trial \(rep=\d+, index=\d+\): OrderedDict\(\[\(\'xpos\', (-?\d+\.\d+)\), \(\'ypos\', (-?\d+\.\d+)\)\]\)"
                         matches = re.findall(fix_pos_pattern, previous_lines_text)
                         # There should be only one match, otherwise we risk mixing up different instances
                         assert len(matches) == 1
                         timestamp, xpos, ypos = matches[0]
                         value = f"[{xpos}, {ypos}]"
 
+                    # If no trigger were recorded in the psychopy log, we need to approximate its timestamp
+                    # with the closest log event.
+                    if not timestamp:
+                        if keyword == "movie":
+                            # We coded the resting-state task such that the movie starts at the trigger.
+                            trigger_timestamp = onset
+                        elif keyword in ["blank", "cog", "mot", "cog"]:
+                            # The closest event for qct is "EXP 	eyetracker.clearEvents()"
+                            trigger_pattern = (
+                                r"(\d+\.\d+)\s+EXP\s+eyetracker.clearEvents()"
+                            )
+                            trigger_timestamp = re.findall(trigger_pattern, file)[0]
+                        else:
+                            # The closest event for bht is "EXP  text_2: autoDraw = False"
+                            trigger_pattern = (
+                                r"(\d+\.\d+)\s+EXP\s+text_2: autoDraw = False"
+                            )
+                            trigger_timestamp = re.findall(trigger_pattern, file)[0]
+
+                    # Subtract the timestamp of the first trigger to the onset of the task to get events
+                    # onset in the fMRI recording time.
+                    onset = onset - trigger_timestamp
+
+                    # Keep only 1 decimal of precision
+                    onset = round(onset, 1)
+                    duration = round(duration, 1)
 
                     # We have all the information needed for the event, it can be inserted in the dataframe.
-                    event = {"onset": onset, "duration": duration, "trial-type": trial_type, "value": value}
-                    event_dataframe = pd.concat([event_dataframe, pd.DataFrame([event])], ignore_index=True)
+                    event = {
+                        "onset": onset,
+                        "duration": duration,
+                        "trial-type": trial_type,
+                        "value": value,
+                    }
+                    event_dataframe = pd.concat(
+                        [event_dataframe, pd.DataFrame([event])], ignore_index=True
+                    )
 
                     # Remove the start timestamp from the dictionary to avoid double counting
                     del start_timestamp[keyword]
-
         else:
             raise PatternNotFoundError(autodraw_pattern, log)
 
