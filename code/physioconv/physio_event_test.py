@@ -1,6 +1,5 @@
 import unittest
 import pandas as pd
-from ..code.physioconv.write_event_file import write_event_file_from_log
 
 EXPECTED_DURATION = {
     "blank": 3,
@@ -41,6 +40,8 @@ class TestEvents(unittest.TestCase):
     """
 
     def __init__(self, data, *args, **kwargs):
+        from write_event_file import write_event_file_from_log
+        
         super(TestEvents, self).__init__(*args, **kwargs)
 
         if isinstance(data, pd.DataFrame):

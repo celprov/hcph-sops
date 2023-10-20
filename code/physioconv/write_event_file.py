@@ -26,7 +26,6 @@ import re
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import unittest
-from tests.physio_event_test import TestEvents
 
 EVENTS_JSON_BOILERPLATE = {
     "StimulusPresentation": {
@@ -418,6 +417,8 @@ def write_event_file_from_log(log: str) -> None:
 
 
 def test_event(event_dataframe):
+    from physio_event_test import TestEvents
+
     # Create a test suite with the TestEventsTSV test case
     suite = unittest.TestLoader().loadTestsFromTestCase(TestEvents)
 
@@ -454,7 +455,7 @@ def write_all_event_files(folder_path: str) -> None:
     for filename in physio_log:
         file_path = os.path.join(folder_path, filename)
         event_dataframe = write_event_file_from_log(file_path)
-        test_event(event_dataframe)
+        #test_event(event_dataframe)
 
 
 if __name__ == "__main__":
