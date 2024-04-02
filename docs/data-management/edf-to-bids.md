@@ -1,4 +1,5 @@
-To be BIDS compatible, the eye-tracking information needs to be extracted from the EDF file into a dataframe that will be saved as a `eyetrack_physio.tsv.gz` and its annotating JSON sidecar.
+For conversion into BIDS, the eye-tracking information is extracted from EDF files into data frames.
+The data frames are processed and then saved as `<matches>_physio.tsv.gz` files with corresponding JSON sidecar.
 
 ## Reading EyeLink's EDF recordings
 
@@ -18,7 +19,7 @@ Our ET device produces EyeLink's EDF recording files, which will be accessed wit
 
     As a result, three *Pandas*' dataframes will be obtained:
 
-    * `recording` contains the actual ET data, which corresponds to the gaze coordinates in the screen space,
+    * `recording` contains the actual ET data, which corresponds to a number of measurements such as gaze coordinates in the screen space,
     * `events` contains information of events reported by the device (most substantially these are fixations, saccades, and blinks), and
     * `messages` with the logged textual messages sent to the device.
 
@@ -51,10 +52,10 @@ messages = messages.drop(messages.index[_cal_hdr])
 
 **Extracting the `StartTime` and `StopTime` metadata**.
 We then search for messages signaling the start and stop run events.
-These events are stored in the JSON sidecar file annotating our `_eyetrack_physio.tsv.gz` file.
+These events are stored in the JSON sidecar file annotating our `<matches>_physio.tsv.gz` file.
 In our *Psychopy* experiment files, we configure messages be sent to the ET at these events.
 The message changes a little with the RSfMRI experiment, but are usually like `hello <taskname>` and `bye <taskname>`.
-Those message of interest are stored in the variables `message_first_trigger` and `message_last_trigger`, respectively.
+Those signaling messages are stored in the variables `message_first_trigger` and `message_last_trigger`, respectively.
 In the last line, we clean up these used-up lines from the dataframe.
 
 ``` Python
