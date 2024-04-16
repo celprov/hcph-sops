@@ -116,6 +116,18 @@ If there are, follow the procedure described in ["*MRIQC* failed to produce all 
 - [ ] Scroll down to the average BOLD mosaic and apply the corresponding [exclusion criteria](qaqc-criteria-unprocessed.md#functional-mri).
 - [ ] Inspect the zoomed-in view of the average BOLD mosaic as well and apply the same [exclusion criteria](qaqc-criteria-unprocessed.md#functional-mri).
 
+### Assessing diffusion images
+- [ ] Open each *MRIQC* report on a Web Browser.
+- [ ] Visualize all reportlets in the `Summary` section:
+    - [ ] Inspect the shell-wise joint distribution of SNR vs FA and apply the corresponding [exclusion criteria](qaqc-criteria-unprocessed.md#).
+    - [ ] Scroll down to the fractional anisotropy (FA) map and apply the exclusion criteria.
+    - [ ] Navigate to the mean diffusivity (MD) map and apply the exclusion criteria.
+- [ ] Continue with the `DWI shells` section. For each b-value, proceed as follows:
+    - [ ] Visualize the first flickering mosaic presenting the average and the standard deviation across volumes in that DWI shell and apply the    
+        exclusion criteria.
+    - [ ] Scroll down to the view of the background and apply the exclusion criteria.
+- [ ] Proceed as [earlier](#mriqc-failed) if errors are reported within the "Errors" section.
+
 ## Visualizing *MRIQC*'s group reports
 
 ### Assessing anatomical images
