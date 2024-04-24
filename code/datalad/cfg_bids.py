@@ -33,6 +33,11 @@ force_in_git = [
     # (might contain sensitive information)
     '*.tsv',
 ]
+
+force_in_gitannex = [
+    '*.svg',
+]
+
 # make an attempt to discover the prospective change in .gitattributes
 # to decide what needs to be done, and make this procedure idempotent
 # (for simple cases)
@@ -48,6 +53,13 @@ ds.repo.set_gitattributes([
     (path, {'annex.largefiles': 'nothing'})
     for path in force_in_git
     if '{} annex.largefiles=nothing'.format(path) not in attrs
+])
+
+# amend gitattributes, if needed
+ds.repo.set_gitattributes([
+    (path, {'annex.largefiles': 'anything'})
+    for path in force_in_gitannex
+    if '{} annex.largefiles=anything'.format(path) not in attrs
 ])
 
 # leave clean
