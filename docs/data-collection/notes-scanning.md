@@ -163,6 +163,7 @@ Adjust settings by pressing the respective button and then turning the central k
 !!! warning "Turning off the alarm"
 
     The alarm is turned off differently depending on the system:
+    
     * {{settings.mri.models.mri1}}, push the central knob (button 1). 
     * {{settings.mri.models.mri2}} and {{settings.mri.models.mri3}}: touch one of the tactile screens on the scanner's front.
 
