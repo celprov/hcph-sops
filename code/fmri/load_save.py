@@ -334,6 +334,9 @@ def reorder_iqms(iqms_df: pd.DataFrame, fc_paths: list[str]):
         session=iqms_df["bids_name"].str.extract(r"ses-(\w+)_"),
         task=iqms_df["bids_name"].str.extract(r"task-(\w+)_")
     )
+    #Hack the task column to match the task name, until we resolve it at the source
+    iqms_df["task"] = iqms_df["task"].str.replace("rest", "rsmovie")
+    
     entities_list = [parse_file_entities(filepath) for filepath in fc_paths]
     entities_df = pd.DataFrame(entities_list)
 
