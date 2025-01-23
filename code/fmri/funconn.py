@@ -597,15 +597,8 @@ def main():
     atlas_network = getattr(atlas_data, "labels").loc[:, NETWORK_MAPPING]
 
     if output is None:
-        run_name = f"DiFuMo{atlas_dimension:d}"
-        if study_name:
-            run_name = "-".join([study_name, run_name])
-
-        run_name += (low_pass is not None) * "-LP"
-        run_name += (interpolate) * "-noCensoring"
-
         output = op.join(
-            find_derivative(input_path), "functional_connectivity", run_name
+            find_derivative(input_path), "functional_connectivity"
         )
     logging.info(f"Output will be save as derivatives in:\n\t{output}")
 
@@ -626,7 +619,7 @@ def main():
         logging.info(f"{len(all_missing_ts)} files are missing timeseries.")
         logging.debug("Looking for existing fc matrices ...")
         missing_only_fc = check_existing_output(
-            output, all_existing_ts, patterns=FC_PATTERN, meas=fc_label, **FC_FILLS
+            output, all_existing_ts, patterns=FC_PATTERN, meas=fc_label, scale=atlas_dimension, **FC_FILLS
         )
         logging.info(
             f"{len(all_missing_ts + missing_only_fc)} files are missing FC matrices."
