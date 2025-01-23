@@ -555,6 +555,7 @@ def main():
     denoising_strategy = args.denoising_strategy
     motion = args.motion
     fd_threshold = args.FD_thresh
+    fd_threshold_str = str(fd_threshold).replace(".", "")
     std_dvars_threshold = args.SDVARS_thresh
     scrub = args.n_scrub_frames
     fc_estimator = args.fc_estimator
@@ -613,13 +614,14 @@ def main():
             all_filenames,
             return_existing=True,
             patterns=TIMESERIES_PATTERN,
+            fdthresh=fd_threshold_str,
             **TIMESERIES_FILLS,
         )
 
         logging.info(f"{len(all_missing_ts)} files are missing timeseries.")
         logging.debug("Looking for existing fc matrices ...")
         missing_only_fc = check_existing_output(
-            output, all_existing_ts, patterns=FC_PATTERN, meas=fc_label, scale=atlas_dimension, **FC_FILLS
+            output, all_existing_ts, patterns=FC_PATTERN, meas=fc_label, scale=atlas_dimension, fdthresh=fd_threshold_str, **FC_FILLS
         )
         logging.info(
             f"{len(all_missing_ts + missing_only_fc)} files are missing FC matrices."
@@ -668,6 +670,7 @@ def main():
             sorted_missing_ts,
             output,
             patterns=TIMESERIES_PATTERN,
+            fdthresh=fd_threshold_str,
             **TIMESERIES_FILLS,
         )
 
@@ -681,6 +684,7 @@ def main():
                 confounds=confounds,
                 labels=atlas_labels,
                 networks=atlas_network,
+                fdthresh=fd_threshold_str,
             )
 
     fc_matrices = compute_connectivity(
@@ -712,6 +716,8 @@ def main():
             output,
             patterns=FC_PATTERN,
             meas=fc_label,
+            scale=atlas_dimension,
+            fdthresh=fd_threshold_str
             **FC_FILLS,
         )
 
@@ -723,6 +729,8 @@ def main():
                 output=output,
                 labels=atlas_labels,
                 meas=fc_label,
+                scale=atlas_dimension,
+                fdthresh=fd_threshold_str
             )
 
     logging.info(

@@ -42,14 +42,14 @@ from nilearn.interfaces.fmriprep.load_confounds import _load_single_confounds_fi
 
 FC_PATTERN: list = [
     "sub-{subject}[/ses-{session}]/func/sub-{subject}"
-    "[_ses-{session}][_task-{task}][_meas-{meas}][_scale-{atlas_dimension}]"
+    "[_ses-{session}][_task-{task}][_meas-{meas}][_scale-{scale}][_fdthresh-{fdthresh}]"
     "_{suffix}{extension}"
 ]
 FC_FILLS: dict = {"suffix": "connectivity", "extension": ".tsv"}
 
 TIMESERIES_PATTERN: list = [
     "sub-{subject}[/ses-{session}]/func/sub-{subject}"
-    "[_ses-{session}][_task-{task}][_desc-{desc}]"
+    "[_ses-{session}][_task-{task}][_fdthresh-{fdthresh}][_desc-{desc}]"
     "_{suffix}{extension}"
 ]
 TIMESERIES_FILLS: dict = {"desc": "denoised", "extension": ".tsv"}

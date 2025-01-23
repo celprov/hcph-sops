@@ -46,7 +46,7 @@ from load_save import get_bids_savename
 
 FIGURE_PATTERN: list = [
     "sub-{subject}/figures/sub-{subject}[_ses-{session}]"
-    "[_task-{task}][_meas-{meas}][_desc-{desc}]"
+    "[_task-{task}][_meas-{meas}][_scale-{scale}][_fdthresh-{fdthresh}][_desc-{desc}]"
     "_{suffix}{extension}",
     "sub-{subject}/figures/sub-{subject}[_ses-{session}]"
     "[_task-{task}][_desc-{desc}]_{suffix}{extension}",
@@ -317,7 +317,7 @@ def visual_report_timeserie(
         [plot_timeseries_carpet, plot_timeseries_signal], ["carpetplot", "timeseries"]
     ):
         ts_saveloc = get_bids_savename(
-            filename, patterns=FIGURE_PATTERN, desc=plot_desc, **FIGURE_FILLS
+            filename, patterns=FIGURE_PATTERN, desc=plot_desc, **FIGURE_FILLS, **kwargs
         )
         plot_func(timeseries, **kwargs)
 
