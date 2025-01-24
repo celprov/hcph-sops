@@ -102,6 +102,12 @@
 
         !!! danger "After three wrong password entries, access will be denied, and only a Siemens engineer will be able to unlock the MR scanner."
 
+    !!! warning "Some protocol folders on {{settings.mri.models.mri3}} are password-protected."
+        To be able to save the protocol into a password-protected folder:
+
+        - [ ] Click on the closed-lock icon (:fontawesome-solid-lock:) placed next to the protected folder's name (`RESEARCH/Oscar` on {{settings.mri.models.mri3}})
+        - [ ] Type the password into the modal dialog: {{secrets.login.unlockpass_dotcockpit| default("******") }}
+
     - [ ] Open the Dot-Cockpit window
         ![](../assets/images/save_protocol1.jpg)
     - [ ] In `Browse`, find the right folder to save the protocol in (*RESEARCH* ⤷ *Oscar*).
@@ -160,19 +166,25 @@ Adjust settings by pressing the respective button and then turning the central k
 - [ ] Use the light :fontawesome-solid-lightbulb: button (4) to adjust the intensity of the illumination inside the scanning room.
 - [ ] Use the fan :fontawesome-solid-fan: button (5) to adjust the ventilation in the scanning room.
 
-!!! warning "The central knob (button 1) will turn off the alarm if pushed when the alarm is on"
+!!! warning "Turning off the alarm"
+
+    The alarm is turned off differently depending on the system:
+    
+    * {{settings.mri.models.mri1}}, push the central knob (button 1). 
+    * {{settings.mri.models.mri2}} and {{settings.mri.models.mri3}}: touch one of the tactile screens on the scanner's front.
 
 ### Communication with the participant
 
-- [ ] ![speaker](../assets/images/speaker.jpg){ align="right" width="250px" }
-    Make sure the speaker is audible (and not annoying) and confirm the participant's feedback.
+- [ ] Make sure the speaker is audible (and not annoying) and confirm the participant's feedback.
     First, keep the speak mode button (1) pressed while you talk to the participant:
 
     !!! quote "Hey [NAME], can you hear me well? Is the audio too loud or too low?"
 
+    ![speaker](../assets/images/speakers.png)
+
 - [ ] Enable the feedback channel from the Scanning Room by pressing the listen mode button (2) once.
     Release the speak mode button (1) before you are ready to listen to participant responses.
-- [ ] Set the volume control of your microphone and the participant's speaker by pressing the corresponding :fontawesome-solid-plus-minus: buttons.
+- [ ] Set the volume control of your microphone and the participant's speaker by pressing the corresponding :fontawesome-solid-plus-minus: buttons on the {{settings.mri.models.mri1}} or slide your finger on the volume line on {{settings.mri.models.mri2}} and {{settings.mri.models.mri3}}.
 - [ ] If this volume increase is not enough for the participant to hear you well, proceed as follow:
     - [ ] In the Siemens program, click on Configuration represented by a gear wheel (:fontawesome-solid-gear:) at the top right of the screen.
     - [ ] Click on *Configuration panel*

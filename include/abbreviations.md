@@ -40,6 +40,7 @@
 *[LR]: left-to-right
 *[MR]: Magnetic Resonance
 *[MRI]: Magnetic Resonance Imaging
+*[NAS]: Network-attached storage
 *[NIfTI]: Neuroimaging Informatics Technology Initiative
 *[OSF]: Open Science Framework (Center for Open Science)
 *[PA]: posterior-to-anterior

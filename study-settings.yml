@@ -6,6 +6,10 @@ mri:
     func_rest: '20min 6s'
     func_bht: '5min 41s'
     func_qct: '2min 38s'
+  models:
+    mri1: 'Prisma<sup>Fit</sup>'
+    mri2: 'Vida<sup>Fit</sup>'
+    mri3: 'Vida'
 
 psychopy:
   tasks:

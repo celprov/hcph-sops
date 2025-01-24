@@ -140,28 +140,47 @@ Get familiar with the setup and read through the [ET Instruction Manual](../asse
 The study will collect data with two different scanning protocols.
 Most of what is described in the present SOPs addresses the *Reliability Imaging Protocol* that will be acquired on the {{ secrets.rooms.mri1 | default("███") }} scanner.
 
-!!! important "Reliability imaging protocol printouts"
+!!! important "Imaging protocol printouts"
 
     The final printouts are here:
+
+    * Reliability protocol:
     [HCPh_AP](../assets/files/HCPh_AP.pdf),
     [HCPh_PA](../assets/files/HCPh_PA.pdf),
     [HCPh_LR](../assets/files/HCPh_LR.pdf), and
     [HCPh_RL](../assets/files/HCPh_RL.pdf).
+    * Standard protocol:
+        * {{ settings.mri.models.mri1}}: 
+        [HCPh_AP_Prisma](../assets/files/HCPh_AP_Prisma.pdf),
+        [HCPh_PA_Prisma](../assets/files/HCPh_PA_Prisma.pdf),
+        [HCPh_LR_Prisma](../assets/files/HCPh_LR_Prisma.pdf), and
+        [HCPh_RL_Prisma](../assets/files/HCPh_RL_Prisma.pdf).
+        * {{ settings.mri.models.mri2}}: 
+        [HCPh_AP_VidaFit](../assets/files/HCPh_AP_VidaFit.pdf),
+        [HCPh_PA_VidaFit](../assets/files/HCPh_PA_VidaFit.pdf),
+        [HCPh_LR_VidaFit](../assets/files/HCPh_LR_VidaFit.pdf), and
+        [HCPh_RL_VidaFit](../assets/files/HCPh_RL_VidaFit.pdf).
+        * {{ settings.mri.models.mri3}}: 
+        [HCPh_AP_Vida](../assets/files/HCPh_AP_Vida.pdf),
+        [HCPh_PA_Vida](../assets/files/HCPh_PA_Vida.pdf),
+        [HCPh_LR_Vida](../assets/files/HCPh_LR_Vida.pdf), and
+        [HCPh_RL_Vida](../assets/files/HCPh_RL_Vida.pdf).
+    
 
-| **Reliability Imaging Protocol (36 sessions $\times$ one scanner)** | mm:ss | **Standard Imaging Protocol (12 sessions $\times$ three scanners)** | mm:ss |
-|---|---|---|---|
-| Head scout | 00:14 | Head scout | 00:14 |
-| FoV Manual positioning | 01:00 | FoV Manual positioning | 01:00 |
-| T1w (anatomical reference) | 5:41 | T1w (anatomical reference) | 5:41  |
-| DWI ($B_\text{0}$ field mapping) | 00:54 | EPI BOLD ($B_\text{0}$ field mapping) | 00:30 |
-| DWI (dMRI, structural connectivity) | 33:52 | BOLD (single-echo RSfMRI, eyes open) | 20:09 |
-| GRE ($B_\text{0}$ field mapping) | 02:38 | GRE ($B_\text{0}$ field mapping) | 03:08 |
-| BOLD (positive-control task fMRI) | 03:07 | BOLD (multi-echo RSfMRI, eyes open, **only {{ secrets.rooms.mri1 | default("███") }}**) | 10:09 |
-| EPI BOLD ($B_\text{0}$ field mapping) | 00:27 | DWI (dMRI, structural connectivity) | 27:31 |
-| BOLD (multi-echo RSfMRI, naturalistic movie) | 20:09 | DWI ($B_\text{0}$ field mapping) | 01:10 |
-| BOLD (breath-holding task fMRI) | 06:00  | T2w (anatomical reference) | 08:24 |
-| T2w (anatomical reference) | 05:10  | | |
-| **Total Acquisition Time** | 79:12 | **Total Acquisition Time** | 77:56 |
+| **Reliability Imaging Protocol (36 sessions $\times$ one scanner)** | mm:ss | **Standard Imaging Protocol (12 sessions $\times$ three scanners)** | mm:ss ({{settings.mri.models.mri1}}) | mm:ss ({{settings.mri.models.mri2}}) | mm:ss ({{settings.mri.models.mri3}}) |
+|---|---|---|---|---|---|
+| Head scout | 00:14 | Head scout | 00:14 | " | " |
+| FoV Manual positioning | 01:00 | FoV Manual positioning | 01:00 | " | " |
+| T1w (anatomical reference) | 05:41 | T1w (anatomical reference) | 05:03 | 04:23 | 04:23 |
+| DWI ($B_\text{0}$ field mapping) | 00:54 | EPI BOLD ($B_\text{0}$ field mapping) | 00:29 | " | " |
+| DWI (dMRI, structural connectivity) | 33:52 | BOLD (multi-echo RSfMRI, eyes open) | 20:29 | " | " |
+| GRE ($B_\text{0}$ field mapping) | 02:38 | GRE ($B_\text{0}$ field mapping) | 02:31 | " | " |
+| BOLD (positive-control task fMRI) | 03:07 | DWI (dMRI, structural connectivity) | 33:17 | 33:23 | 33:25 |
+| EPI BOLD ($B_\text{0}$ field mapping) | 00:27 | DWI ($B_\text{0}$ field mapping) | 00:55 | " | " |
+| BOLD (multi-echo RSfMRI, naturalistic movie) | 20:09 | T2w (anatomical reference) | 05:44 | 05:41 | 05:44|
+| BOLD (breath-holding task fMRI) | 06:00  | | | | |
+| T2w (anatomical reference) | 05:10  | | | | |
+| **Total Acquisition Time** | 79:12 | **Total Acquisition Time** | 72:54 | 72:12 | 72:22 |
 
 !!! important "Stimulation program timings (reliability imaging protocol only)"
 

@@ -14,15 +14,23 @@
         - [ ] In case of discovering any previously undisclosed contraindication, the volunteer **MUST NOT** participate in the study.
 
 - [ ] Load the adequate protocol ([guidelines here](notes-scanning.md#preparing-the-protocol)).
-    **Verify you are loading the appropriate phase-encoding (PE) direction corresponding to the session.**
+    **Verify you are loading the appropriate phase-encoding (PE) direction corresponding to the session** by checking the appropriate
+    schedule below (today is <mark>{{ now() }}</mark>).
 
-    ???+ important "Session schedule"
+    ??? important "Session schedule: *Reliability imaging protocol*"
 
-        <a name="session-schedule"></a>
-        Today is <mark>{{ now() }}</mark>:
+        <a name="session-schedule-reliability"></a>
 
 {% filter indent(width=8) %}
 {% include 'code/sessions/schedule.md' %}
+{% endfilter %}
+
+    ??? important "Session schedule: *Standard imaging protocol*"
+
+        <a name="session-schedule-standard"></a>
+
+{% filter indent(width=8) %}
+{% include 'code/sessions/schedule-wave2.md' %}
 {% endfilter %}
 
 ---
