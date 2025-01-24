@@ -28,7 +28,7 @@
     Inès has contributed with excellent materials to the initial versions of these SOPs, and re-enabled the trigger issuing by our dMRI sequence (which had disappeared after a scanner's software upgrade...)
     Arthur helped us with more recent aspects regarding the gas analyzer calibration and has supported us in other meaningful ways.
 
-| ![](assets/images/cohort1.png) |
+| ![](assets/images/cohort1.svg) |
 |:--:|
 | ***Figure 1. Experimental design of Cohort I.*** *The first section of the study involves acquiring 72 sessions across three scanners of a single subject.* |
 

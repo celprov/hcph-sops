@@ -1,1 +1,1 @@
-python funconn.py /data/derivatives/hcph-derivatives-rsmovie/ --task rsmovie --ses 003
+python funconn.py /data/derivatives/hcph-derivatives-rsmovie/hcph-fmriprep/ --task rsmovie --atlas-dimension 128 --fc-estimator correlation

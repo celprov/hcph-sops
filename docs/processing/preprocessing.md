@@ -1,14 +1,42 @@
-## Executing *fMRIPrep*
+## Executing *fMRIPrep* (on *Curnagl*)
 
-Because *fMRIPrep* creates a single anatomical reference for all sessions, we generate such reference first by setting the `--anat-only` flag.
-If that *fMRIPrep* execution finishes successfully, the anatomical processing outcomes will be stored in the output folder.
-We will then run one *fMRIPrep* process for each dataset's session, which is the recommended way for datasets with a large number of sessions (e.g., more than six sessions).
-We avert that session-wise *fMRIPrep*'s processes run into race conditions by pre-computing the anatomical reference.
+### Preparations
+
+- [ ] Prepare a *FreeSurfer* license file, for example at `$HOME/.freesurfer.txt`:
+
+    ``` text
+{% filter indent(width=4) %}
+{{ secrets.licenses.freesurfer | default('<REDACTED:: Visit https://surfer.nmr.mgh.harvard.edu/fswiki/License for more information>') }}
+{% endfilter %}
+    ```
+
+- [ ] Ensure the dataset is up-to-date:
+    ``` bash
+    cd $WORK/data/hcph-dataset
+    micromamba run -n datamgt datalad update --how ff-only
+    ```
+- [ ] Checkout the correct tag corresponding to the intended processing:
+    ``` bash
+    micromamba run -n datamgt git checkout fmriprep-reliability-1.1
+    ```
+
+### Executing anatomical workflow first with `--anat-only`
+
+!!! warning "Compute nodes DO NOT have access to the NAS"
+
+    Therefore, make sure data have been installed and fetched onto the `{{ secrets.data.curnagl_workdir | default('<workdir>')}}/data/hcph-dataset/` directory.
+
+- [ ] Create a SLURM *sbatch* file, for example at `$HOME/fmriprep-anatonly.sbatch`:
+
+    ``` bash
+{% filter indent(width=4) %}
+{% include 'code/fmriprep/fmriprep-anatonly.sbatch' %}
+{% endfilter %}
+    ```
 
 - [ ] Submit the anatomical workflow:
-    ``` bash title="Launch each session through fMRIPrep in parallel"
-    cd code/fmriprep
-    bash ss-fmriprep-anatonly.sh
+    ``` bash
+    sbatch fmriprep-anatonly.sbatch
     ```
 
     ??? abstract "The sbatch file to run *fMRIPrep* with `--anat-only`"

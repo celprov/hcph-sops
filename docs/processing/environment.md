@@ -76,8 +76,8 @@ When HPC is planned for processing, *DataLad* will be required on that system(s)
 
         In such a scenario, create a *Conda* environment with a lower version of Python, and re-install datalad
         ``` shell
-        conda create -n "datalad" python=3.10
-        conda activate datalad
+        conda create -n "datamgt" python=3.10
+        conda activate datamgt
         conda install -c conda-forge datalad datalad-container
         ```
 
@@ -115,13 +115,13 @@ When HPC is planned for processing, *DataLad* will be required on that system(s)
         ```
     - [ ] Log out and back in
 
-- [ ] Create a new environment called `datalad` with *Git annex* in it:
+- [ ] Create a new environment called `datamgt` with *Git annex* in it:
     ```Bash
-    micromamba create -n datalad python=3.12 git-annex=*=alldep*
+    micromamba create -n datamgt python=3.12 git-annex=*=alldep*
     ```
 - [ ] Activate the environment
     ```Bash
-    micromamba activate datalad
+    micromamba activate datamgt
     ```
 - [ ] Install *DataLad* and *DataLad-next*:
     ```Bash
@@ -135,7 +135,9 @@ When HPC is planned for processing, *DataLad* will be required on that system(s)
     git config --global --add user.email doe@example.com
     ```
 
-## Installing the *DataLad* dataset
+## Getting data
+
+### Installing the original HCPh dataset with *DataLad*
 
 Wherever you want to process the data, you'll need to `datalad install` it before you can pull down (`datalad get`) the data.
 To access the metadata (e.g., sidecar JSON files of the BIDS structure), you'll need to have access to the git repository that corresponds to the data (https://github.com/{{ secrets.data.gh_repo | default('&lt;organization&gt;/&lt;repo_name&gt;') }}.git)
@@ -149,56 +151,78 @@ To fetch the dataset from the RIA store, you will need your SSH key be added to 
     - [ ] Send the SSH **public** key you just generated (e.g., `~/.ssh/id_ed25519.pub`) over email to Oscar at {{ secrets.email.oscar | default('*****@******') }}.
 
 
-- [ ] Install and get the dataset normally:
+- [ ] Install the dataset:
 
-    === "Installing the dataset without fetching data from annex"
-
-        ``` shell
-        datalad install https://github.com/{{ secrets.data.gh_repo | default('<organization>/<repo_name>') }}.git
-        ```
-
-    === "Installing the dataset and fetch all data from annex, with 8 parallel threads"
-
-        ``` shell
-        datalad install -g -J 8 https://github.com/{{ secrets.data.gh_repo | default('<organization>/<repo_name>') }}.git
-        ```
-
-!!! warning "Reconfiguring the RIA store on *Curnagl*"
-
-    When on *Curnagl*, you'll need to *convert* the `ria-storage` remote
-    on a local `ria-store` because you cannot ssh from *Curnagl* into itself:
-
-    ```Bash
-    git annex initremote --private --sameas=ria-storage curnagl-storage type=external externaltype=ora encryption=none url="ria+file://{{ secrets.data.curnagl_ria_store | default('<path>') }}"
+    ``` shell
+    micromamba run -n datamgt datalad install https://github.com/{{ secrets.data.gh_repo | default('<organization>/<repo_name>') }}.git
     ```
 
-In addition to reconfiguring the RIA store, we should execute `datalad get` within a compute node:
+- [ ] Reconfigure the RIA store:
 
-- [ ] Create a *sbatch* job prescription script called `datalad-get.sbatch`:
-    ```Bash
-    #!/bin/bash -l
-
-    #SBATCH --account {{ secrets.data.curnagl_account | default('<PI>_<project_id>') }}
-
-    #SBATCH --chdir {{ secrets.data.curnagl_workdir | default('<workdir>') }}/data/hcph-dataset
-    #SBATCH --job-name datalad_get
-    #SBATCH --partition cpu
-    #SBATCH --cpus-per-task 12
-    #SBATCH --mem 10G
-    #SBATCH --time 05:00:00
-    #SBATCH --export NONE
-
-    #SBATCH --mail-type ALL
-    #SBATCH --mail-user <your-email-address>
-    #SBATCH --output /users/%u/logs/%x-%A-%a.out
-    #SBATCH --error /users/%u/logs/%x-%A-%a.err
-
-
-    micromamba run -n fmriprep datalad get -J${SLURM_CPUS_PER_TASK} .
+    ``` shell
+    micromamba run -n datamgt \
+        git annex initremote --private --sameas=ria-storage \
+        curnagl-storage type=external externaltype=ora encryption=none \
+        url="ria+file://{{ secrets.data.curnagl_ria_store_data | default('<path>') }}"
     ```
-- [ ] Submit the job:
+
+    !!! danger "REQUIRED step"
+
+        When on *Curnagl*, you'll need to *convert* the `ria-storage` remote
+        on a local `ria-store` because you cannot ssh from *Curnagl* into itself.
+
+- [ ] Get the dataset:
+
+    !!! danger "Data MUST be fetched from a development node."
+
+        The NAS is not accessible from compute nodes in *Curnagl*.
+
+        - [ ] Execute `datalad get` within a development node:
+
+            ``` Bash
+            salloc --partition=interactive --time=02:00:00 --cpus-per-task 12
+            ```
+
+            Success is demonstrated by an output like:
+
+            ```Text
+            salloc: Granted job allocation 47734642
+            salloc: Nodes dna064 are ready for job
+            Switching to the 20240303 software stack
+            ```
+
+        - [ ] Fetch the data:
+
+            ```Bash
+            cd $WORK/data
+            micromamba run -n datamgt datalad get -J${SLURM_CPUS_PER_TASK} .
+            ```
+
+### Installing derivatives
+
+Derivatives are installed in a similar way:
+
+- [ ] Install the dataset:
+
+    ``` shell
+    micromamba run -n datamgt datalad install https://github.com/{{ secrets.data.gh_deriv_fmriprep | default('<organization>/<repo_name>') }}.git
+    ```
+
+- [ ] Reconfigure the RIA store:
+
+    ``` shell
+    micromamba run -n datamgt \
+        git annex initremote --private --sameas=ria-storage \
+        curnagl-storage type=external externaltype=ora encryption=none \
+        url="ria+file://{{ secrets.data.curnagl_ria_store_fmriprep | default('<path>') }}"
+    ```
+
+- [ ] Fetch the data
+
     ```Bash
-    sbatch datalad-get.sbatch
+    salloc --partition=interactive --time=02:00:00 --cpus-per-task 12
+    cd $WORK/data
+    micromamba run -n datamgt datalad get -J${SLURM_CPUS_PER_TASK} .
     ```
 
 ## Registering containers

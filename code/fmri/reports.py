@@ -34,7 +34,6 @@ import pandas as pd
 import plotly.offline as pyo
 import seaborn as sns
 from matplotlib.axes import Axes
-from matplotlib.cm import get_cmap
 from matplotlib.lines import Line2D
 from nireports.assembler.report import Report
 from nilearn.plotting import plot_design_matrix, plot_matrix
@@ -109,7 +108,7 @@ def plot_timeseries_carpet(
         net_dict = {net: i + 1 for i, net in enumerate(networks_sorted.unique())}
         net_plot = np.array([[net_dict[net] for net in networks_sorted]])
 
-        net_cmap = get_cmap(NETWORK_CMAP, len(net_dict))
+        net_cmap = plt.get_cmap(NETWORK_CMAP, len(net_dict))
         ax_net.imshow(net_plot.T, cmap=NETWORK_CMAP, aspect="auto")
 
         legend_elements = [
@@ -207,7 +206,7 @@ def plot_timeseries_signal(
         net_dict = {net: i + 1 for i, net in enumerate(networks_sorted.unique())}
         net_plot = np.array([[net_dict[net] for net in networks_sorted]])
 
-        net_cmap = get_cmap(NETWORK_CMAP, len(net_dict))
+        net_cmap = plt.get_cmap(NETWORK_CMAP, len(net_dict))
 
         colors = [net_cmap(i - 1) for i in net_plot][0]
 
@@ -568,7 +567,7 @@ def group_reportlet_qc_fc(
 
     if fc_matrices.shape[1] != iqms_df.shape[0]:
         raise ValueError(
-            "The number of functional connectivity matrices and IQMs do not match."
+            f"The number of functional connectivity matrices ({fc_matrices.shape[1]}) and IQMs ({iqms_df.shape[0]}) do not match."
         )
 
     if fc_matrices.shape[1] == 1:
@@ -767,6 +766,7 @@ def group_report(
     """Generate a group report."""
 
     # Generate each reportlets
+    os.makedirs(op.join(output, "reportlets"), exist_ok=True)
     group_report_censoring(good_timepoints_df, output)
     group_reportlet_fc_dist(fc_matrices, output)
     qc_fc_dict = group_reportlet_qc_fc(fc_matrices, iqms_df, output)

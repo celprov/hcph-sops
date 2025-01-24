@@ -55,7 +55,7 @@ When employing high-performance computing (HPC), we provide [some specific guide
     cd hcph-dataset
     datalad create-sibling-ria -s ria-storage --alias hcph-dataset \
             --new-store-ok --storage-sibling=only \
-            "ria+ssh://{{ secrets.login.curnagl_ria | default('<username>') }}@curnagl.dcsr.unil.ch:{{ secrets.data.curnagl_ria_store | default('<absolute-path-of-store>') }}"
+            "ria+ssh://{{ secrets.login.curnagl_ria | default('<username>') }}@curnagl.dcsr.unil.ch:{{ secrets.data.curnagl_ria_store_data | default('<absolute-path-of-store>') }}"
     ```
 
     ??? bug "Getting `[ERROR ] 'SSHRemoteIO' ...`"

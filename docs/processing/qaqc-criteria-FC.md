@@ -42,7 +42,7 @@ Now we will assess that QC-FC distribution<sup>[2]</sup> and the null distributi
 ## QC-FC versus Euclidean distance
 
 - [ ] Check that, for all IQM, there is no significant correlation between QC-FC correlations and Euclidean distance separating the nodes<sup>[2]</sup>.
-    If the correlation is significant for one IQM or more, it indicates that connectivity estimates are biased in a distance-dependent manner, with many long-distance correlations decreased by motion and many short-distance correlations increased by motion<sup>[4]</sup>.
+    If the correlation is significant for one IQM or more, it indicates that connectivity estimates are biased in a distance-dependent manner, with a tendency for motion to increase long-range correlation and decrease short-range correlation<sup>[4]</sup>.
     As such, motion correction needs to be revised as follows:
     - [ ] Include more motion regressors by switching motion regression strategy using the `--motion "full"` flag when running `funconn.py`.
     - [ ] If tweaking the preprocessing does not suffice, revise [the exclusion criteria by excluding additional sessions](qaqc-criteria-FC.md#qc-fc-versus-euclidean-distance-1).
