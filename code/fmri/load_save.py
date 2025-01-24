@@ -451,7 +451,7 @@ def check_existing_output(
     return missing_data.tolist()
 
 
-def load_timeseries(func_filename: list[str], output: str) -> list[np.ndarray]:
+def load_timeseries(func_filename: list[str], output: str, **kwargs) -> list[np.ndarray]:
     """Load existing timeseries from .csv files.
 
     Parameters
@@ -472,7 +472,7 @@ def load_timeseries(func_filename: list[str], output: str) -> list[np.ndarray]:
     loaded_ts = []
     for filename in func_filename:
         path_to_ts = get_bids_savename(
-            filename, patterns=TIMESERIES_PATTERN, **TIMESERIES_FILLS
+            filename, patterns=TIMESERIES_PATTERN, **TIMESERIES_FILLS, **kwargs
         )
         logging.debug(f"\t{op.join(output, path_to_ts)}")
         loaded_ts.append(

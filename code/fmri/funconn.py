@@ -626,7 +626,7 @@ def main():
         logging.info(
             f"{len(all_missing_ts + missing_only_fc)} files are missing FC matrices."
         )
-        existing_timeseries = load_timeseries(missing_only_fc, output)
+        existing_timeseries = load_timeseries(missing_only_fc, output, fdthresh=fd_threshold_str)
     else:
         missing_only_fc = []
         existing_timeseries = []
@@ -717,7 +717,7 @@ def main():
             patterns=FC_PATTERN,
             meas=fc_label,
             scale=atlas_dimension,
-            fdthresh=fd_threshold_str
+            fdthresh=fd_threshold_str,
             **FC_FILLS,
         )
 
