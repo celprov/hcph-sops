@@ -296,9 +296,9 @@ A laptop should be available to fill the issue.
 - [ ] [Click this link](https://github.com/{{ secrets.data.covariates_repo | default('<gh_user>/<name>') }}/issues/new?assignees=acionca&labels=mood%2Cbefore&projects=&template=mood-questionnaire-before.yml&title=%5BMOOD%5D%5BBEFORE%5D+sub-001_ses-yyy), or alternatively
 - [ ] manually open a GitHub Issue at the [questionnaire repository](https://github.com/{{ secrets.data.covariates_repo | default('<gh_user>/<name>') }}):
     - [ ] Under the section `Issues`, click on <span class="consolebutton green">New issue</span>
-    - [ ] Select the template `Mood questionnaire before scan` by clicking on <span class="consolebutton green">Get started</span>
+    - [ ] Select the corresponding template for the *Mood questionnaire before scan* (either reliability or standard protocol)  by clicking on its <span class="consolebutton green">Get started</span> button.
 
-- [ ] Fill the date of the scan as well as the PE for this session (accessible in the [schedule](participant-prep.md/#session-schedule-reliability))
+- [ ] Fill out the date of the scan as well as the PE for this session (prescribed in the corresponding [schedule table](participant-prep.md/#session-schedule-reliability))
 - [ ] Fill in weather details of the scanning day based [MeteoSwiss](https://www.meteoswiss.admin.ch/local-forecasts/lausanne/1003.html#forecast-tab=detail-view) in 1003 Lausanne.
     - [ ] Report the maximum and minimum temperature in degrees celsius.
     - [ ] Report the wind speed at the time of scanning in km/h.

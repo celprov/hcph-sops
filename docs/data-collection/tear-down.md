@@ -32,13 +32,14 @@
 - [ ] Help the participant step down and accompany them out to the control room.
 - [ ] Help the participant recover their personal belongings and change clothes if necessary.
 - [ ] Solicit more feedback on participant's comfort for future sessions.
-- [ ] Collect `After scan` covariates
-    - [ ] Click [this link](https://github.com/{{ secrets.data.covariates_repo | default('<gh_user>/<name>') }}/issues/new?assignees=acionca&labels=mood%2Cafter&projects=&template=mood-questionnaire-after.yml&title=%5BMOOD%5D%5BAFTER%5D+sub-001_ses-yyy), or alternatively
-    - [ ] manually open a GitHub Issue at the [questionnaire repository](https://github.com/{{ secrets.data.covariates_repo | default('<gh_user>/<name>') }}):
-        - [ ] Under the section `Issues`, click on <span class="consolebutton green">New issue</span>
-        - [ ] Select the `Mood questionnaire after scan` template by clicking on <span class="consolebutton green">Get started</span>
-    - [ ] Fill in the session id (accessible in the [schedule](participant-prep.md/#session-schedule-reliability))
-    - [ ] Ask the participant to fill the rest of the form
+- [ ] Collect post-scan information (e.g., whether the participant fell asleep) as follows:
+    - [ ] Click [this link](https://github.com/{{ secrets.data.covariates_repo | default('<gh_user>/<name>') }}/issues/new?assignees=celprov&labels=mood%2Cafter&projects=&template=mood-questionnaire-after.yml&title=%5BMOOD%5D%5BAFTER%5D+sub-001_ses-yyy), or alternatively
+    - [ ] Open a *GitHub Issue* in the [covariate collection repository](https://github.com/{{ secrets.data.covariates_repo | default('<gh_user>/<name>') }}):
+        - [ ] Click on the *Issues* tab.
+        - [ ] Click on <span class="consolebutton green">New issue</span>.
+        - [ ] Select the corresponding template for the *Mood questionnaire after scan* (either reliability or standard protocol) by clicking on its <span class="consolebutton green">Get started</span> button.
+    - [ ] Fill in the session identifier (prescribed in the [schedule](participant-prep.md/#session-schedule-reliability))
+    - [ ] Ask the participant to fill out the rest of the form
 - [ ] Solicit tickets and receipts for transportation.
 - [ ] Give the participant the corresponding compensation for the participation and transportation.
 - [ ] Ask the participant to sign the receipt of the amount of the financial compensation.
