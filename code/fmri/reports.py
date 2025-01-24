@@ -320,7 +320,11 @@ def visual_report_timeserie(
         [plot_timeseries_carpet, plot_timeseries_signal], ["carpetplot", "timeseries"]
     ):
         ts_saveloc = get_bids_savename(
-            filename, patterns=FIGURE_PATTERN, desc=plot_desc, fdthresh=fdthresh, **FIGURE_FILLS
+            filename,
+            patterns=FIGURE_PATTERN,
+            desc=plot_desc,
+            fdthresh=fdthresh,
+            **FIGURE_FILLS,
         )
         plot_func(timeseries, **kwargs)
 
@@ -333,7 +337,11 @@ def visual_report_timeserie(
     # Plotting confounds as a design matrix
     if confounds is not None:
         conf_saveloc = get_bids_savename(
-            filename, patterns=FIGURE_PATTERN, desc="designmatrix", fdthresh=fdthresh, **FIGURE_FILLS
+            filename,
+            patterns=FIGURE_PATTERN,
+            desc="designmatrix",
+            fdthresh=fdthresh,
+            **FIGURE_FILLS,
         )
 
         _, ax = plt.subplots(figsize=TS_FIGURE_SIZE)

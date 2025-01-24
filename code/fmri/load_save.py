@@ -332,7 +332,7 @@ def reorder_iqms(iqms_df: pd.DataFrame, fc_paths: list[str]):
     iqms_df = iqms_df.assign(
         subject=iqms_df["bids_name"].str.extract(r"sub-(\d+)_"),
         session=iqms_df["bids_name"].str.extract(r"ses-(\w+)_"),
-        task=iqms_df["bids_name"].str.extract(r"task-(\w+)_")
+        task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
     )
     entities_list = [parse_file_entities(filepath) for filepath in fc_paths]
     entities_df = pd.DataFrame(entities_list)
@@ -451,7 +451,9 @@ def check_existing_output(
     return missing_data.tolist()
 
 
-def load_timeseries(func_filename: list[str], output: str, **kwargs) -> list[np.ndarray]:
+def load_timeseries(
+    func_filename: list[str], output: str, **kwargs
+) -> list[np.ndarray]:
     """Load existing timeseries from .csv files.
 
     Parameters

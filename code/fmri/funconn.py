@@ -598,9 +598,7 @@ def main():
     atlas_network = getattr(atlas_data, "labels").loc[:, NETWORK_MAPPING]
 
     if output is None:
-        output = op.join(
-            find_derivative(input_path), "functional_connectivity"
-        )
+        output = op.join(find_derivative(input_path), "functional_connectivity")
     logging.info(f"Output will be save as derivatives in:\n\t{output}")
 
     covar_estimator, fc_kind, fc_label = get_fc_strategy(fc_estimator)
@@ -621,12 +619,20 @@ def main():
         logging.info(f"{len(all_missing_ts)} files are missing timeseries.")
         logging.debug("Looking for existing fc matrices ...")
         missing_only_fc = check_existing_output(
-            output, all_existing_ts, patterns=FC_PATTERN, meas=fc_label, scale=atlas_dimension, fdthresh=fd_threshold_str, **FC_FILLS
+            output,
+            all_existing_ts,
+            patterns=FC_PATTERN,
+            meas=fc_label,
+            scale=atlas_dimension,
+            fdthresh=fd_threshold_str,
+            **FC_FILLS,
         )
         logging.info(
             f"{len(all_missing_ts + missing_only_fc)} files are missing FC matrices."
         )
-        existing_timeseries = load_timeseries(missing_only_fc, output, fdthresh=fd_threshold_str)
+        existing_timeseries = load_timeseries(
+            missing_only_fc, output, fdthresh=fd_threshold_str
+        )
     else:
         missing_only_fc = []
         existing_timeseries = []
@@ -730,7 +736,7 @@ def main():
                 labels=atlas_labels,
                 meas=fc_label,
                 scale=atlas_dimension,
-                fdthresh=fd_threshold_str
+                fdthresh=fd_threshold_str,
             )
 
     logging.info(
