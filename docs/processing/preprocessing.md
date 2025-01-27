@@ -39,35 +39,41 @@
     sbatch fmriprep-anatonly.sbatch
     ```
 
-- [ ] Once the anatomical workflow ran successfully, submit a *job array* with one scanning session each with the `--bids-filter-file` argument selecting the corresponding session, and point the `--fs-subjects-dir` argument to the folder where *FreeSurfer* results were stored.
-    -  [ ] To avoid conflicts when multiple fMRIPrep instances write to the same file simultaneously, we recommend pre-downloading the template with TemplateFlow.
-        - [ ] If not yet installed, install *TemplateFlow* using Pypi
-        ``` bash
-        pip install templateflow
-        ```
-        - [ ] Download the template using the Python client. By default, the template will be saved under `$HOME/.cache/templateflow`.
-        We will then mount that path into the container running *fMRIPrep*.
-        ``` bash
-        python
-        from templateflow import api as tflow
-        tflow.get('MNI152NLin6Asym', desc=None, resolution=1, suffix='T1w', extension='nii.gz')
-        ```
+### Executing functional workflow
 
-    - [ ] 
-        ``` bash title="Launch each session through fMRIPrep in parallel"
+- [ ] Create a SLURM *sbatch* file, for example at `$HOME/fmriprep.sbatch`:
+
+    ``` bash
+{% filter indent(width=4) %}
+{% include 'code/fmriprep/fmriprep.sbatch' %}
+{% endfilter %}
+    ```
+
+- [ ] Submit the functional workflow:
+    ``` bash
+    sbatch fmriprep.sbatch
+    ```
+
+??? abstract "If running all sessions in a single job is too heavy, you can follow the following steps to run *fMRIPrep* on each session in parallel"
+
+    - [ ] To avoid conflicts when multiple *fMRIPrep* instances write to the same file simultaneously, we recommend pre-downloading the template with TemplateFlow.
+
+        - [ ] If not yet installed, install *TemplateFlow* using *PyPi*
+            ``` bash
+            pip install templateflow
+            ```
+        - [ ] Use the *TemplateFlow* Python client to download the template, which is saved by default to `$HOME/.cache/templateflow`. In the SLURM *sbatch* file, we will mount that path into the container. To download the template, open a Python session by typing `python` and then run the following commands:
+            ``` python
+            from templateflow import api as tflow
+            tflow.get('MNI152NLin6Asym', desc=None, resolution=1, suffix='T1w', extension='nii.gz')
+            ```
+
+    - [ ] Once the anatomical workflow ran successfully, submit a *job array* with one scanning session each with the `--bids-filter-file` argument selecting the corresponding session, and point the `--fs-subjects-dir` argument to the folder where *FreeSurfer* results were stored.
+        ``` bash
         cd code/fmriprep
         bash submit-fmriprep.sh
         ```
-
-        ??? abstract "The sbatch file to run *fMRIPrep* session-wise"
-
-            ``` bash
-    {% filter indent(width=8) %}
-    {% include 'code/fmriprep/ss-fmriprep.sh' %}
-    {% endfilter %}
-            ```
-    
-
+        
 
 
 ### How to proceed if some *fMRIPrep* derivatives are missing
