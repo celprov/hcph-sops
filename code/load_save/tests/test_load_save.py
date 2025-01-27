@@ -3,10 +3,10 @@ import os
 import random
 import pandas as pd
 import os.path as op
-import fmri.load_save as fl
+
+import load_save.load_save as fl
 
 from itertools import chain
-
 
 @pytest.mark.parametrize(
     ("path", "expected_path"),

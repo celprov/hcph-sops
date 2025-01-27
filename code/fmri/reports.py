@@ -41,7 +41,7 @@ from scipy.stats import pearsonr, ks_2samp
 from time import strftime
 from uuid import uuid4
 
-from load_save import get_bids_savename
+from load_save.load_save import get_bids_savename
 
 
 FIGURE_PATTERN: list = [

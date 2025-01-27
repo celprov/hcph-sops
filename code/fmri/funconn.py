@@ -36,6 +36,7 @@ import argparse
 import csv
 import logging
 import os
+import sys
 import os.path as op
 from itertools import chain
 from typing import Optional, Union
@@ -50,8 +51,11 @@ from nilearn.interfaces.fmriprep import load_confounds
 from nilearn.maskers import MultiNiftiMapsMasker
 from nilearn.signal import _handle_scrubbed_volumes, _sanitize_confound_dtype, clean
 
+# Add the project root to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
 from reports import plot_interpolation, visual_report_timeserie, visual_report_fc
-from load_save import (
+from load_save.load_save import (
     find_derivative,
     check_existing_output,
     get_atlas_data,

@@ -23,16 +23,20 @@
 
 import argparse
 import logging
+import sys
+import os
 
 import numpy as np
 import os.path as op
 import pandas as pd
 
-
 from itertools import chain
 from funconn import FC_FILLS, FC_PATTERN
 
-from load_save import (
+# Add the code directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+
+from load_save.load_save import (
     get_atlas_data,
     find_atlas_dimension,
     find_derivative,
