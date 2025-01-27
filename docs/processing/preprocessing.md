@@ -39,27 +39,36 @@
     sbatch fmriprep-anatonly.sbatch
     ```
 
-    ??? abstract "The sbatch file to run *fMRIPrep* with `--anat-only`"
-
-        ``` bash
-{% filter indent(width=8) %}
-{% include 'code/fmriprep/ss-fmriprep-anatonly.sh' %}
-{% endfilter %}
-        ```
-
 - [ ] Once the anatomical workflow ran successfully, submit a *job array* with one scanning session each with the `--bids-filter-file` argument selecting the corresponding session, and point the `--fs-subjects-dir` argument to the folder where *FreeSurfer* results were stored.
-    ``` bash title="Launch each session through fMRIPrep in parallel"
-    cd code/fmriprep
-    bash ss-fmriprep.sh
-    ```
-
-    ??? abstract "The sbatch file to run *fMRIPrep* session-wise"
-
+    -  [ ] To avoid conflicts when multiple fMRIPrep instances write to the same file simultaneously, we recommend pre-downloading the template with TemplateFlow.
+        - [ ] If not yet installed, install *TemplateFlow* using Pypi
         ``` bash
-{% filter indent(width=8) %}
-{% include 'code/fmriprep/ss-fmriprep.sh' %}
-{% endfilter %}
+        pip install templateflow
         ```
+        - [ ] Download the template using the Python client. By default, the template will be saved under `$HOME/.cache/templateflow`.
+        We will then mount that path into the container running *fMRIPrep*.
+        ``` bash
+        python
+        from templateflow import api as tflow
+        tflow.get('MNI152NLin6Asym', desc=None, resolution=1, suffix='T1w', extension='nii.gz')
+        ```
+
+    - [ ] 
+        ``` bash title="Launch each session through fMRIPrep in parallel"
+        cd code/fmriprep
+        bash submit-fmriprep.sh
+        ```
+
+        ??? abstract "The sbatch file to run *fMRIPrep* session-wise"
+
+            ``` bash
+    {% filter indent(width=8) %}
+    {% include 'code/fmriprep/ss-fmriprep.sh' %}
+    {% endfilter %}
+            ```
+    
+
+
 
 ### How to proceed if some *fMRIPrep* derivatives are missing
 
