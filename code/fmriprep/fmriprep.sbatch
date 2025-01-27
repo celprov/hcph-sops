@@ -25,7 +25,7 @@
 #SBATCH --mem=128G 
 #SBATCH --time=24:00:00 
 #SBATCH --export=NONE
-#SBATCH --chdir=/scratch/cprovins
+#SBATCH --chdir=/scratch/%u
 #
 # Logging
 #SBATCH --output=/users/%u/logs/%x-%A-%a.out
@@ -34,7 +34,7 @@
 ml singularityce gcc
 
 WORKDIR={{ secrets.data.curnagl_workdir | default('<workdir>')}}
-SCRATCH=/scratch/cprovins/fmriprep/
+SCRATCH={{ secrets.data.curnagl_scratchdir | default('<scratchdir>')}}/fmriprep/
 OUTDIR=$WORKDIR/data/derivatives/fmriprep-generalization/
 
 mkdir -p $OUTDIR
