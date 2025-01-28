@@ -54,8 +54,6 @@ for S in "${ALL_SES[@]}"; do
         fi
 done
 
-echo "Submitting `basename $DATADIR` with ${#SES[@]} sessions"
-# remove one since we are starting at 0
-JOBS=`expr ${#SES[@]} - 1`
+#remove one since we are starting at 0
+JOBS=`expr ${\#SES[@]} - 1`
 sbatch --array=0-$JOBS ss-fmriprep.sh $DATADIR ${SES[@]}
-

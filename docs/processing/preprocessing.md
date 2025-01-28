@@ -69,11 +69,18 @@
             ```
 
     - [ ] Once the anatomical workflow ran successfully, submit a *job array* with one scanning session each with the `--bids-filter-file` argument selecting the corresponding session, and point the `--fs-subjects-dir` argument to the folder where *FreeSurfer* results were stored.
-        ``` bash
-        cd code/fmriprep
-        bash submit-fmriprep.sh
-        ```
-        
+   
+    ``` bash title="Bash script to submit a job array with one scanning session each"
+    {% filter indent(width=4) %}
+    {% include 'code/fmriprep/submit-fmriprep.sh' %}
+    {% endfilter %}
+    ```
+
+    ``` bash title="Sbatch to submit a single session (corresponding to ss-fmriprep.sh in the script above)"
+    {% filter indent(width=4) %}
+    {% include 'code/fmriprep/ss-fmriprep.sh' %}
+    {% endfilter %}
+    ```
 
 
 ### How to proceed if some *fMRIPrep* derivatives are missing
