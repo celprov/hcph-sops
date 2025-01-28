@@ -46,7 +46,7 @@ from load_save import get_bids_savename
 
 FIGURE_PATTERN: list = [
     "sub-{subject}/figures/sub-{subject}[_ses-{session}]"
-    "[_task-{task}][_meas-{meas}][_scale-{scale}][_fdthresh-{fdthresh}][_desc-{desc}]"
+    "[_task-{task}][_scale-{scale}][_fdthresh-{fdthresh}][_meas-{meas}][_desc-{desc}]"
     "_{suffix}{extension}",
     "sub-{subject}/figures/sub-{subject}[_ses-{session}]"
     "[_task-{task}][_desc-{desc}]_{suffix}{extension}",

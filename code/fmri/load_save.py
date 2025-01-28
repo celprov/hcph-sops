@@ -42,7 +42,7 @@ from nilearn.interfaces.fmriprep.load_confounds import _load_single_confounds_fi
 
 FC_PATTERN: list = [
     "sub-{subject}[/ses-{session}]/func/sub-{subject}"
-    "[_ses-{session}][_task-{task}][_meas-{meas}][_scale-{scale}][_fdthresh-{fdthresh}]"
+    "[_ses-{session}][_task-{task}][_scale-{scale}][_fdthresh-{fdthresh}][_meas-{meas}]"
     "_{suffix}{extension}"
 ]
 FC_FILLS: dict = {"suffix": "connectivity", "extension": ".tsv"}
