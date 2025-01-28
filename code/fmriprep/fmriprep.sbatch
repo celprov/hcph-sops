@@ -16,7 +16,7 @@
 #
 # General SLURM settings
 #SBATCH --mail-type=ALL 
-#SBATCH --mail-user=<email>@unil.ch
+#SBATCH --mail-user={{ secrets.data.curnagl_email | default('<email>@unil.ch') }}
 #
 # Job settings
 #SBATCH --job-name=fmriprep

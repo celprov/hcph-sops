@@ -38,7 +38,7 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 
-DATADIR=<workdir>/data/hcph-dataset
+DATADIR={{ secrets.data.curnagl_workdir | default('<workdir>') }}/data/hcph-dataset
 SUB="sub-001"
 pushd $DATADIR/inputs/$SUB > /dev/null
 ALL_SES=(`ls -d ses-*`)
