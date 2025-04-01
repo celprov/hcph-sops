@@ -1,4 +1,4 @@
-def get_confounds(dataset_path="/data/datasets/hcph-dataset"):
+def get_confounds(dataset_path="/data/datasets/hcph-dataset", iqms_path=None):
     import pandas as pd
     from pathlib import Path
 
@@ -29,4 +29,36 @@ def get_confounds(dataset_path="/data/datasets/hcph-dataset"):
         time_of_day=confounds_df["datetime"].dt.round("H").dt.time,
     )
     confounds_df.drop(columns=["datetime"], inplace=True)
+
+    # If iqms_path is provided, read the IQMs and merge them with the confounds
+    if iqms_path:
+        iqms_df = pd.read_csv(iqms_path, sep="\t")
+        iqms_df = iqms_df.assign(
+            subject=iqms_df["bids_name"].str.extract(r"sub-(\d+)_"),
+            session=iqms_df["bids_name"].str.extract(r"ses-(\w+)_"),
+        )
+        iqms_df = iqms_df[["subject", "session", "fd_mean"]]
+
+        # Merge the fd_mean values into the confounds DataFrame
+        confounds_df = pd.merge(
+            confounds_df, iqms_df, on=["subject", "session"], how="inner"
+        )
+        # Verify that the correct fd_mean has been associated with sessions
+        assert (
+            iqms_df.loc[iqms_df["session"] == "001", "fd_mean"].values[0]
+            == confounds_df.loc[confounds_df["session"] == "001", "fd_mean"].values[0]
+        ), f"FD mean pairing with confounds failed"
+        assert (
+            iqms_df.loc[iqms_df["session"] == "pilot20103060", "fd_mean"].values[0]
+            == confounds_df.loc[
+                confounds_df["session"] == "pilot20103060", "fd_mean"
+            ].values[0]
+        ), f"FD mean pairing with confounds failed"
+        assert (
+            iqms_df.loc[iqms_df["session"] == "pilot020", "fd_mean"].values[0]
+            == confounds_df.loc[
+                confounds_df["session"] == "pilot020", "fd_mean"
+            ].values[0]
+        ), f"FD mean pairing with confounds failed"
+
     return confounds_df
