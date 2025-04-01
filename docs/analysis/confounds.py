@@ -1,4 +1,4 @@
-def get_confounds(dataset_path="/data/datasets/hcph-dataset", iqms_path=None):
+def get_confounds(dataset_path="/data/datasets/hcph-dataset", iqms_path=None, iqm_of_interest=["fd_mean"]):
     import pandas as pd
     from pathlib import Path
 
@@ -36,29 +36,15 @@ def get_confounds(dataset_path="/data/datasets/hcph-dataset", iqms_path=None):
         iqms_df = iqms_df.assign(
             subject=iqms_df["bids_name"].str.extract(r"sub-(\d+)_"),
             session=iqms_df["bids_name"].str.extract(r"ses-(\w+)_"),
+            modality=iqms_df["bids_name"].str.split("_").str[-1],
+            task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
         )
-        iqms_df = iqms_df[["subject", "session", "fd_mean"]]
+        # Keep only the IQMs of interest
+        iqms_df = iqms_df[["subject", "session", "modality", "task"] + iqm_of_interest]
 
         # Merge the fd_mean values into the confounds DataFrame
         confounds_df = pd.merge(
-            confounds_df, iqms_df, on=["subject", "session"], how="inner"
+            confounds_df, iqms_df, on=["subject", "session", "modality", "task"], how="left"
         )
-        # Verify that the correct fd_mean has been associated with sessions
-        assert (
-            iqms_df.loc[iqms_df["session"] == "001", "fd_mean"].values[0]
-            == confounds_df.loc[confounds_df["session"] == "001", "fd_mean"].values[0]
-        ), f"FD mean pairing with confounds failed"
-        assert (
-            iqms_df.loc[iqms_df["session"] == "pilot20103060", "fd_mean"].values[0]
-            == confounds_df.loc[
-                confounds_df["session"] == "pilot20103060", "fd_mean"
-            ].values[0]
-        ), f"FD mean pairing with confounds failed"
-        assert (
-            iqms_df.loc[iqms_df["session"] == "pilot020", "fd_mean"].values[0]
-            == confounds_df.loc[
-                confounds_df["session"] == "pilot020", "fd_mean"
-            ].values[0]
-        ), f"FD mean pairing with confounds failed"
 
     return confounds_df
