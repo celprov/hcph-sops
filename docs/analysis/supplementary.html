@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Supplementary images for the analysis of fMRI variability</title>
+  <style>
+    body { display: flex; font-family: sans-serif; }
+    .sidebar { width: 300px; padding: 1em; background: #f5f5f5; }
+    .viewer { flex: 1; padding: 1em; }
+    label { font-weight: bold; display: block; margin-top: 1em; }
+    select { width: 100%; padding: 0.2em; }
+    img { max-width: 100%; border: 1px solid #ccc; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Supplementary images related to the analysis of fMRI variability</h2>
+    <p style="margin-top: 0.2em; font-size: 0.8em; color: #555;">
+        Choose the parameters below to view the corresponding image.
+      </p>
+
+    <label>Atlas dimension</label>
+    <select id="scale" onchange="updateImage()">
+      <option value="64">64</option>
+    </select>
+
+    <label>FD threshold</label>
+    <select id="fdthresh" onchange="updateImage()">
+      <option value="04">0.4</option>
+    </select>
+
+    <label>Dependency metric</label>
+    <select id="meas" onchange="updateImage()">
+      <option value="correlation">Correlation</option>
+    </select>
+
+    <label>Grouping confound</label>
+    <select id="conf" onchange="updateImage()">
+      <option value="pedir">Phase-encoding direction</option>
+      <option value="time">Time of day</option>
+    </select>
+
+    <label>Visualization</label>
+    <select id="viz" onchange="updateImage()">
+      <option value="resvar">Residual variance</option>
+    </select>
+  </div>
+
+  <div class="viewer">
+    <img id="image" src="" alt="Select parameters to view image">
+  </div>
+
+  <script>
+    const imageFolderPath = "../assets/images/";
+
+    function updateImage() {
+      const scale = document.getElementById("scale").value;
+      const fdthresh = document.getElementById("fdthresh").value;
+      const meas = document.getElementById("meas").value;
+      const conf = document.getElementById("conf").value;
+      const viz = document.getElementById("viz").value;
+
+      const filename = `sub-001_task-rsmovie_scale-${scale}_fdthresh-${fdthresh}_meas-${meas}_exp-fmrivar_conf-${conf}_viz-${viz}_bold.svg.png`;
+
+      const img = document.getElementById("image");
+      img.src = imageFolderPath + filename;
+      img.alt = filename;
+    }
+
+    // Initialize with first values
+    window.onload = updateImage;
+  </script>
+</body>
+</html>

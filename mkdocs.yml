@@ -33,6 +33,7 @@ nav:
     - Analysis:
       - Quality control task activation analysis: analysis/qct-activation.ipynb
       - Calibrating regressor to flag HCPh T1w images for exclusion: analysis/qc-regressor-hcph.ipynb
+      - Paper supplementary material: analysis/supplementary.html
     - Release of data: release.md
     - Appendices:
       - Notes on the scanner's console: data-collection/notes-scanning.md
