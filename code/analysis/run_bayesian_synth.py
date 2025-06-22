@@ -11,7 +11,6 @@ for pi0 in pi0_values:
     print(f"Running simulation with pi0 = {pi0}")
     results_multi_pi0[pi0] = run_simulation(
         true_pi0=pi0,
-        true_lambda=2.0,
         true_mu=3.0,
         true_sigma=0.5,
         display_plots=False,
@@ -28,7 +27,6 @@ for mu in mu_values:
     print(f"Running simulation with mu = {mu}")
     results_multi_mu[mu] = run_simulation(
         true_pi0=0.1,
-        true_lambda=2.0,
         true_mu=mu,
         true_sigma=0.5,
         display_plots=False,
