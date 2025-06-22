@@ -431,7 +431,6 @@ def summary_across_fits(traces, params):
 
 def run_simulation(
     true_pi0=0.3,
-    true_lambda=2.0,
     true_mu=0.8,
     true_sigma=0.15,
     n_samples=36,
@@ -451,8 +450,6 @@ def run_simulation(
     -----------
     true_pi0 : float
         Proportion of unconnected regions (0 to 1)
-    true_lambda : float
-        Rate parameter for exponential distribution (unconnected regions)
     true_mu : float
         Mean density for connected regions
     true_sigma : float
@@ -481,7 +478,6 @@ def run_simulation(
 
     print(f"Simulation with parameters:")
     print(f"- pi0 (proportion unconnected): {true_pi0}")
-    print(f"- lambda (exponential rate): {true_lambda}")
     print(f"- mu (connected mean): {true_mu}")
     print(f"- sigma (connected std): {true_sigma}")
     print(f"- draws: {draws}")
@@ -496,7 +492,7 @@ def run_simulation(
     # Generate data
     print("Generating synthetic data...")
     density_values, connection_status, params = generate_synthetic_data(
-        true_pi0, true_lambda, true_mu, true_sigma, n_samples, random_seed
+        true_pi0, true_mu, true_sigma, n_samples, random_seed
     )
     results["data"] = {
         "density_values": density_values,
