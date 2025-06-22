@@ -41,7 +41,7 @@ def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
         chains=4,
         cores=1,
     )
-    var_names = ["pi0", "lambda_exp", "sigma"]
+    var_names = ["pi0", "sigma"]
     param_values = {}
     if model_info["mu_type"] == "fixed":
         param_values["mu"] = data_mean

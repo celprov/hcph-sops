@@ -8,7 +8,7 @@ from IPython.display import display
 
 
 def generate_synthetic_data(
-    true_pi0, true_lambda, true_mu, true_sigma, n_samples, random_seed=None
+    true_pi0, true_mu, true_sigma, n_samples, random_seed=None
 ):
     """
     Generate synthetic data from a mixture model.
@@ -17,8 +17,6 @@ def generate_synthetic_data(
     -----------
     true_pi0 : float
         Proportion of unconnected regions (0 to 1)
-    true_lambda : float
-        Rate parameter for exponential distribution (unconnected regions)
     true_mu : float
         Mean density for connected regions
     true_sigma : float
@@ -45,7 +43,7 @@ def generate_synthetic_data(
     # For unconnected regions (exponential distribution)
     unconnected_idx = connection_status == 0
     density_values[unconnected_idx] = np.random.exponential(
-        scale=1 / true_lambda,  # Convert rate to scale
+        scale=1 / true_sigma,  # Convert rate to scale
         size=np.sum(unconnected_idx),
     )
 
@@ -61,7 +59,6 @@ def generate_synthetic_data(
     # Create parameter dictionary for reference
     params = {
         "pi0": true_pi0,
-        "lambda_exp": true_lambda,
         "mu": true_mu,
         "sigma": true_sigma,
         "n_samples": n_samples,
@@ -116,9 +113,6 @@ def define_mixture_model(
         # Prior for proportion of unconnected regions
         pi0 = pm.Beta("pi0", alpha=1.5, beta=2)
 
-        # Prior for exponential rate parameter
-        lambda_exp = pm.Gamma("lambda_exp", alpha=1, beta=10)
-
         # Prior for standard deviation of connected regions
         sigma = pm.HalfNormal("sigma", sigma=0.6)
 
@@ -129,7 +123,7 @@ def define_mixture_model(
             mu = pm.Normal("mu", mu=mu_prior_mean, sigma=mu_prior_sigma)
 
         # Component 1: Exponential distribution for unconnected regions
-        density_unconnected = pm.Exponential.dist(lam=lambda_exp)
+        density_unconnected = pm.Exponential.dist(lam=sigma)
 
         # Component 2: Truncated Normal for connected regions
         density_connected = pm.TruncatedNormal.dist(mu=mu, sigma=sigma, lower=0)
@@ -272,7 +266,7 @@ def create_analysis_plots(trace, params, model, model_info):
     results = {}
 
     # Get variables to summarize
-    var_names = ["pi0", "sigma", "lambda_exp"]
+    var_names = ["pi0", "sigma"]
     if model_info["mu_type"] == "learned":
         var_names.append("mu")
 
@@ -284,7 +278,6 @@ def create_analysis_plots(trace, params, model, model_info):
     param_comparison = {}
     for param_name, pymc_name in [
         ("pi0", "pi0"),
-        ("lambda_exp", "lambda_exp"),
         ("sigma", "sigma"),
         ("mu", "mu"),
     ]:
@@ -308,7 +301,7 @@ def create_analysis_plots(trace, params, model, model_info):
     fig_trace = plt.figure(figsize=(12, 8))
     trace_plot = az.plot_trace(trace, var_names=var_names)
     if params:
-        parameter_list = [params["pi0"], params["sigma"], params["lambda_exp"]]
+        parameter_list = [params["pi0"], params["sigma"]]
         if model_info["mu_type"] == "learned":
             parameter_list.append(params["mu"])
         for ax, true_value in zip(trace_plot[:, 0].ravel(), parameter_list):
