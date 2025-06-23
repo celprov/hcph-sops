@@ -71,16 +71,28 @@ def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
 ## main
 exp_start = time.time()
 mu_type = "fixed"
-output_dir = "/home/cprovins/projects/bayesian_sc/mixture_model_1"
+simulated_data = False
+atlas_sub_path = "/home/cprovins/projects/bayesian_sc/SC_66sub.npy"
+output_dir = "/home/cprovins/projects/bayesian_sc/mixture_model_lambdasigma_realSC"
 atlas_path = "/data/probconnatlas/wm.connatlas.scale1.h5"
+# output_dir = "/users/cprovins/projects/bayesian_sc/mixture_model_1"
+# os.makedirs(output_dir, exist_ok=True)
+# atlas_path = "/users/cprovins/data/probconnatlas/wm.connatlas.scale1.h5"
 time_file = os.path.join(output_dir, "fitting_times.csv")
 with open(time_file, "w") as f:
     f.write("edge,time_taken\n")
 
-# Load simulated SC
-SC_matrices, noise = simulate_sc_density_bias(
-    atlas_path=atlas_path, connectome_atlas_as_ref=True, num_sessions=36
-)
+if simulated_data:
+    # Load simulated SC
+    SC_matrices, noise = simulate_sc_density_bias(
+        atlas_path=atlas_path, connectome_atlas_as_ref=True, num_sessions=36
+    )
+else:
+    print("Fitting real SC matrices from", atlas_sub_path)
+    SC_matrices = np.load(atlas_sub_path)
+    SC_matrices = np.moveaxis(SC_matrices, -1, 0)  # Move sessions to the first dimension
+    print("SC matrices shape:", SC_matrices.shape)
+
 num_sessions = SC_matrices.shape[0]
 atlas_dim = SC_matrices.shape[1]
 # Keep only the upper triangle 
@@ -91,7 +103,7 @@ SC_matrices_flat = np.nan_to_num(SC_matrices_flat, nan=0)
 
 # Run in parallel
 os.makedirs(output_dir, exist_ok=True)
-n_jobs = 20  # or specify a number like 8
+n_jobs = 30
 results = Parallel(n_jobs=n_jobs, backend="loky")(
     delayed(fit_edge)(SC_matrices_flat, c, output_dir, time_file, mu_type=mu_type)
     for c in range(SC_matrices_flat.shape[1])
