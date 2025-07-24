@@ -49,7 +49,7 @@ def get_confounds_scanstsv(dataset_path):
 
     # From the acq_time column, extract the day of week and time of day
     confounds_df = confounds_df.assign(
-        datetime=pd.to_datetime(confounds_df["acq_time"])
+        datetime=pd.to_datetime(confounds_df["acq_time"], format="mixed")
     )
     confounds_df = confounds_df.assign(
         day_of_week=confounds_df["datetime"].dt.day_name(),
@@ -211,7 +211,7 @@ def get_confounds_mood_issues(token_path="/home/cprovins/token_axonlab.txt"):
 
 def get_confounds(
     dataset_path,
-    iqms_path,
+    iqms_path = None,
     iqm_of_interest=["fd_mean"],
 ):
     """
