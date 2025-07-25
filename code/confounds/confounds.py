@@ -106,6 +106,7 @@ def get_confounds_mood_issues(confound_path, confounds_of_interest):
         Path to the table storing the confounds.
     confound_of_interest : list of str
         List of confound columns to retain in the output DataFrame.
+        See https://github.com/TheAxonLab/hcph-dataset/blob/master/phenotype/mood_env_quest.tsv for the possible values.
 
     Returns:
     --------
