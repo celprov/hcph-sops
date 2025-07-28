@@ -61,7 +61,7 @@ def get_confounds_scanstsv(dataset_path):
 
 
 def get_iqms(
-    iqms_path, iqm_of_interest=["fd_mean"]
+    iqms_path, iqms_of_interest=["fd_mean"]
 ):
     """
     Extract imaging quality metrics (IQMs) from a specified TSV file.
@@ -73,7 +73,7 @@ def get_iqms(
     iqms_path : str, optional
         Path to the TSV file containing the IQMs. Default is
         "/data/derivatives/hcph-mriqc/group_dwi.tsv".
-    iqm_of_interest : list of str, optional
+    iqms_of_interest : list of str, optional
         List of column names corresponding to the IQMs to retain in the output.
         Default is ["fd_mean"].
     Returns:
@@ -91,7 +91,7 @@ def get_iqms(
         task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
     )
     # Keep only the IQMs of interest
-    iqms_df = iqms_df[["subject", "session", "modality", "task"] + iqm_of_interest]
+    iqms_df = iqms_df[["subject", "session", "modality", "task"] + iqms_of_interest]
 
     return iqms_df
 
@@ -132,7 +132,7 @@ def get_confounds(
     confound_path,
     confounds_of_interest,
     iqms_path=None,
-    iqm_of_interest=["fd_mean"],
+    iqms_of_interest=["fd_mean"],
 ):
     """
     Extract and merge confounds from various sources for a given dataset.
@@ -152,7 +152,7 @@ def get_confounds(
     iqms_path : str
         The path to the file containing IQMs. If provided, the IQMs will be merged
         with the confounds DataFrame.
-    iqm_of_interest : list of str, optional
+    iqms_of_interest : list of str, optional
         A list of IQMs to extract from the IQMs file. Default is ["fd_mean"].
 
     Returns:
@@ -166,7 +166,7 @@ def get_confounds(
 
     ## If iqms_path is provided, read the IQMs and merge them with the confounds
     if iqms_path:
-        iqms_df = get_iqms(iqms_path, iqm_of_interest)
+        iqms_df = get_iqms(iqms_path, iqms_of_interest)
 
         # Merge the fd_mean values into the confounds DataFrame
         confounds_df = pd.merge(
