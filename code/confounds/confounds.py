@@ -169,6 +169,9 @@ def get_confounds(
     if iqms_path:
         iqms_df = get_iqms(iqms_path, iqm_of_interest)
 
+        # Rename bold to func to match the modality in confounds_df
+        iqms_df["modality"] = iqms_df["modality"].replace("bold", "func")
+
         # Merge the fd_mean values into the confounds DataFrame
         confounds_df = pd.merge(
             confounds_df,
