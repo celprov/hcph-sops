@@ -90,6 +90,11 @@ def get_iqms(
         modality=iqms_df["bids_name"].str.split("_").str[-1],
         task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
     )
+    # Keep only second echo
+    if not iqms_df["echo"].isna().all():
+        iqms_df = iqms_df[iqms_df["echo"] == "2"]
+        print("Warning: Only the IQMs corresponding to the second echo are retained in the IQMs DataFrame.")
+        
     # Keep only the IQMs of interest
     iqms_df = iqms_df[["subject", "session", "modality", "task"] + iqm_of_interest]
 
