@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-
+import logging
 
 def get_confounds_scanstsv(dataset_path):
     """
@@ -89,7 +89,13 @@ def get_iqms(
         session=iqms_df["bids_name"].str.extract(r"ses-(\w+)_"),
         modality=iqms_df["bids_name"].str.split("_").str[-1],
         task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
+        echo=iqms_df["bids_name"].str.extract(r"echo-(\d+)_"),
     )
+    # Keep only second echo
+    if not iqms_df["echo"].isna().all():
+        iqms_df = iqms_df[iqms_df["echo"] == "2"]
+        print("Warning: Only the IQMs corresponding to the second echo are retained in the IQMs DataFrame.")
+        
     # Keep only the IQMs of interest
     iqms_df = iqms_df[["subject", "session", "modality", "task"] + iqm_of_interest]
 
@@ -133,7 +139,7 @@ def get_confounds(
     confound_path,
     confounds_of_interest,
     iqms_path=None,
-    iqm_of_interest=["fd_mean"],
+    iqms_of_interest=["fd_mean"],
 ):
     """
     Extract and merge confounds from various sources for a given dataset.
@@ -153,7 +159,7 @@ def get_confounds(
     iqms_path : str
         The path to the file containing IQMs. If provided, the IQMs will be merged
         with the confounds DataFrame.
-    iqm_of_interest : list of str, optional
+    iqms_of_interest : list of str, optional
         A list of IQMs to extract from the IQMs file. Default is ["fd_mean"].
 
     Returns:
@@ -167,8 +173,8 @@ def get_confounds(
 
     ## If iqms_path is provided, read the IQMs and merge them with the confounds
     if iqms_path:
-        iqms_df = get_iqms(iqms_path, iqm_of_interest)
-
+        iqms_df = get_iqms(iqms_path, iqms_of_interest)
+        
         # Rename bold to func to match the modality in confounds_df
         iqms_df["modality"] = iqms_df["modality"].replace("bold", "func")
 
