@@ -192,3 +192,12 @@ Most of what is described in the present SOPs addresses the *Reliability Imaging
     * `{{ settings.psychopy.tasks.func_qct }}` ➜ <mark>**{{ settings.mri.timings.func_qct }}**</mark>,
     * `{{ settings.psychopy.tasks.func_rest }}` ➜ <mark>**{{ settings.mri.timings.func_rest }}**</mark>, and
     * `{{ settings.psychopy.tasks.func_bht }}` ➜ <mark>**{{ settings.mri.timings.func_bht }}**</mark>.
+
+## Movie-watching fMRI
+
+The movie played in all sessions is compressed within 30s here:
+
+<video width="100%" autoplay loop muted>
+    <source src="../../assets/images/mundaka-clip.webm" type="video/webm">
+    Your browser does not support the video tag.
+</video>

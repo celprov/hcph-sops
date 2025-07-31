@@ -12,3 +12,7 @@ matplotlib
 pybids
 nilearn>=0.10.1
 git+https://github.com/celprov/mriqc-learn.git@enh/xgboost_model
+arviz
+h5py
+pymc
+seaborn

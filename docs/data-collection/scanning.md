@@ -91,16 +91,16 @@
 
 !!! warning "When running multiple sessions back-to-back"
 
-        - [ ] Restart a new session of the syncbox (within one session we usually see 9,000+, and the maximum is 9,999):
-            - [ ] Press the central button :fontawesome-solid-circle:{ .bluecolor } to stop the session,
-            - [ ] use the up :fontawesome-solid-caret-up:{ .bluecolor } and down :fontawesome-solid-caret-down:{ .bluecolor } arrows to find and select the option <span class="syncbox">Start Session</span> and hit enter :fontawesome-solid-circle:{ .bluecolor },
-            - [ ] Press the central button :fontawesome-solid-circle:{ .bluecolor } again to start the new session.
-        - [ ] In *AcqKnowledge*, make sure you stopped the previous recording and started a new one (it will ask for a re-calibration of the respiration belt).
-        - [ ] Start a *New examination* on the MR console:
-            - [ ] Make sure all acquisitions are done,
-            - [ ] close any open patient window,
-            - [ ] find the patient in the system (or write new information for a new participant)
-            - [ ] right click on the patient and press `start new examination`.
+    - [ ] Restart a new session of the syncbox (within one session we usually see 9,000+, and the maximum is 9,999):
+        - [ ] Press the central button :fontawesome-solid-circle:{ .bluecolor } to stop the session,
+        - [ ] use the up :fontawesome-solid-caret-up:{ .bluecolor } and down :fontawesome-solid-caret-down:{ .bluecolor } arrows to find and select the option <span class="syncbox">Start Session</span> and hit enter :fontawesome-solid-circle:{ .bluecolor },
+        - [ ] Press the central button :fontawesome-solid-circle:{ .bluecolor } again to start the new session.
+    - [ ] In *AcqKnowledge*, make sure you stopped the previous recording and started a new one (it will ask for a re-calibration of the respiration belt).
+    - [ ] Start a *New examination* on the MR console:
+        - [ ] Make sure all acquisitions are done,
+        - [ ] close any open patient window,
+        - [ ] find the patient in the system (or write new information for a new participant)
+        - [ ] right click on the patient and press `start new examination`.
 
 ## Ensuring the quality of physiological signals
 
@@ -285,8 +285,8 @@ It is critical to check that physiological signals are looking good:
 
     !!! danger "The following two steps MUST be executed in this order"
 
-            - [ ] Drag and drop the modal dialog into the scanner's projector screen.
-            - [ ] Update the session number with the corresponding number.
+        - [ ] Drag and drop the modal dialog into the scanner's projector screen.
+        - [ ] Update the session number with the corresponding number.
 
 !!! important "At this point, the GA should have finished the warm-up so you can verify it is working"
 
@@ -364,8 +364,8 @@ It is critical to check that physiological signals are looking good:
 
     !!! danger "The following two steps MUST be executed in this order"
 
-            - [ ] Drag and drop the modal dialog into the scanner's projector screen.
-            - [ ] Update the session number with the corresponding number.
+        - [ ] Drag and drop the modal dialog into the scanner's projector screen.
+        - [ ] Update the session number with the corresponding number.
 
 
 - [ ] In the issue collecting notes about the session, check the boxes confirming that each fieldmap has been acquired and that you check that the physiological signal are still recording.
@@ -470,10 +470,10 @@ It is critical to check that physiological signals are looking good:
 
     A modal dialog will ask you for the number of trial (automatically calculated, DO NOT modify) and the session number.
 
-    !!! danger "The following steps MUST be executed in this order"
+    !!! danger "The following two steps MUST be executed in this order"
 
-            - [ ] Drag and drop the modal dialog into the scanner's projector screen.
-            - [ ] Update the session number with the corresponding number.
+        - [ ] Drag and drop the modal dialog into the scanner's projector screen.
+        - [ ] Update the session number with the corresponding number.
 
 - [ ] On the stimuli laptop (*{{ secrets.hosts.psychopy | default("███") }}*), check the correct session number is set and hit *OK*.
 
@@ -542,10 +542,10 @@ It is critical to check that physiological signals are looking good:
 
     A modal dialog will ask you for the number of trial (automatically calculated, DO NOT modify) and the session number.
 
-    !!! danger "The following steps MUST be executed in this order"
+    !!! danger "The following two steps MUST be executed in this order"
 
-            - [ ] Drag and drop the modal dialog into the scanner's projector screen.
-            - [ ] Update the session number with the corresponding number.
+        - [ ] Drag and drop the modal dialog into the scanner's projector screen.
+        - [ ] Update the session number with the corresponding number.
 
 - [ ] On the stimuli laptop (*{{ secrets.hosts.psychopy | default("███") }}*), check the correct session number is set and hit *OK*.
 

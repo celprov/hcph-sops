@@ -21,14 +21,19 @@
 
 ??? thanks "Thanks to Garikoitz Lerma-Usabiaga"
 
-    Gari filmed several versions of the *Mundaka clip*, that allowed us to edit the final clip that is presented during the resting state fMRI.
+    Gari filmed several versions of the *Mundaka clip*, that allowed us to edit the final clip that is presented during the resting state fMRI:
+
+    <video width="100%" autoplay loop muted>
+        <source src="assets/images/mundaka-clip.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
 
 ??? thanks "Thanks to Inès de Riedmatten and Arthur Spencer"
 
     Inès has contributed with excellent materials to the initial versions of these SOPs, and re-enabled the trigger issuing by our dMRI sequence (which had disappeared after a scanner's software upgrade...)
     Arthur helped us with more recent aspects regarding the gas analyzer calibration and has supported us in other meaningful ways.
 
-| ![](assets/images/cohort1.svg) |
+| <object type="image/svg+xml" data="assets/images/cohort1.svg" style="width: 100%;"></object> |
 |:--:|
 | ***Figure 1. Experimental design of Cohort I.*** *The first section of the study involves acquiring 72 sessions across three scanners of a single subject.* |
 

@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 
 
-def get_confounds_scanstsv(dataset_path="/data/datasets/hcph-dataset"):
+def get_confounds_scanstsv(dataset_path):
     """
     Extract and process confound information from a `scans.tsv` file.
 
@@ -12,9 +12,8 @@ def get_confounds_scanstsv(dataset_path="/data/datasets/hcph-dataset"):
 
     Parameters:
     -----------
-    dataset_path : str, optional
+    dataset_path : str
         The path to the dataset directory containing the `scans.tsv` file.
-        Default is "/data/datasets/hcph-dataset".
 
     Returns:
     --------
@@ -62,7 +61,7 @@ def get_confounds_scanstsv(dataset_path="/data/datasets/hcph-dataset"):
 
 
 def get_iqms(
-    iqms_path="/data/derivatives/hcph-mriqc/group_dwi.tsv", iqm_of_interest=["fd_mean"]
+    iqms_path, iqm_of_interest=["fd_mean"]
 ):
     """
     Extract imaging quality metrics (IQMs) from a specified TSV file.
@@ -211,8 +210,8 @@ def get_confounds_mood_issues(token_path="/home/cprovins/token_axonlab.txt"):
 
 
 def get_confounds(
-    dataset_path="/data/datasets/hcph-dataset",
-    iqms_path=None,
+    dataset_path,
+    iqms_path,
     iqm_of_interest=["fd_mean"],
 ):
     """
@@ -224,11 +223,11 @@ def get_confounds(
 
     Parameters:
     -----------
-    dataset_path : str, optional
-        The path to the dataset directory. Default is "/data/datasets/hcph-dataset".
-    iqms_path : str, optional
+    dataset_path : str
+        The path to the dataset directory.
+    iqms_path : str
         The path to the file containing IQMs. If provided, the IQMs will be merged
-        with the confounds DataFrame. Default is None.
+        with the confounds DataFrame.
     iqm_of_interest : list of str, optional
         A list of IQMs to extract from the IQMs file. Default is ["fd_mean"].
 
