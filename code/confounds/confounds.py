@@ -90,6 +90,11 @@ def get_iqms(
         modality=iqms_df["bids_name"].str.split("_").str[-1],
         task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
     )
+    # Keep only second echo
+    if not iqms_df["echo"].isna().all():
+        iqms_df = iqms_df[iqms_df["echo"] == "2"]
+        print("Warning: Only the IQMs corresponding to the second echo are retained in the IQMs DataFrame.")
+        
     # Keep only the IQMs of interest
     iqms_df = iqms_df[["subject", "session", "modality", "task"] + iqms_of_interest]
 
@@ -106,6 +111,7 @@ def get_confounds_mood_issues(confound_path, confounds_of_interest):
         Path to the table storing the confounds.
     confound_of_interest : list of str
         List of confound columns to retain in the output DataFrame.
+        See https://github.com/TheAxonLab/hcph-dataset/blob/master/phenotype/mood_env_quest.tsv for the possible values.
 
     Returns:
     --------
@@ -167,6 +173,9 @@ def get_confounds(
     ## If iqms_path is provided, read the IQMs and merge them with the confounds
     if iqms_path:
         iqms_df = get_iqms(iqms_path, iqms_of_interest)
+
+        # Rename bold to func to match the modality in confounds_df
+        iqms_df["modality"] = iqms_df["modality"].replace("bold", "func")
 
         # Merge the fd_mean values into the confounds DataFrame
         confounds_df = pd.merge(
