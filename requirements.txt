@@ -16,3 +16,5 @@ arviz
 h5py
 pymc
 seaborn
+plotly
+nireports
