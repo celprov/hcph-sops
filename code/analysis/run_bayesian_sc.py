@@ -19,7 +19,6 @@ from bayesian_modeling import fit_mixture_model
 
 def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
     start_time = time.time()
-    print(f"Fitting edge {c} of {SC_matrices_flat.shape[1]}")
     pkl_file = os.path.join(output_dir, f"edge_{c:05d}.pkl")
     trace_file = os.path.join(output_dir, f"edge_{c:05d}_trace.nc")
 
@@ -29,6 +28,7 @@ def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
             return pickle.load(f)
 
     # Fit the Bayesian model to this edge repeated measures
+    print(f"Fitting edge {c} of {SC_matrices_flat.shape[1]}")
     data_mean = np.mean(SC_matrices_flat[:, c])
     print("Sampling the trace for edge", c)
     trace, model, model_info = fit_mixture_model(
@@ -72,12 +72,13 @@ def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
 exp_start = time.time()
 mu_type = "fixed"
 simulated_data = False
-atlas_sub_path = "/home/cprovins/projects/bayesian_sc/SC_66sub.npy"
-output_dir = "/home/cprovins/projects/bayesian_sc/mixture_model_lambdasigma_realSC"
-atlas_path = "/data/probconnatlas/wm.connatlas.scale1.h5"
-# output_dir = "/users/cprovins/projects/bayesian_sc/mixture_model_1"
-# os.makedirs(output_dir, exist_ok=True)
-# atlas_path = "/users/cprovins/data/probconnatlas/wm.connatlas.scale1.h5"
+#atlas_sub_path = "/home/cprovins/projects/bayesian_sc/SC_66sub.npy"
+#output_dir = "/home/cprovins/projects/bayesian_sc/mixture_model_lambdasigma_realSC"
+#atlas_path = "/data/probconnatlas/wm.connatlas.scale1.h5"
+atlas_sub_path = "/users/cprovins/data/SC_66sub.npy"
+output_dir = "/users/cprovins/projects/bayesian_sc/mixture_model_lambdasigma_realSC"
+os.makedirs(output_dir, exist_ok=True)
+atlas_path = "/users/cprovins/data/probconnatlas/wm.connatlas.scale1.h5"
 time_file = os.path.join(output_dir, "fitting_times.csv")
 with open(time_file, "w") as f:
     f.write("edge,time_taken\n")
