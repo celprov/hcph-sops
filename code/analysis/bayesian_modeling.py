@@ -128,12 +128,12 @@ def define_mixture_model(
         # Component 2: Truncated Normal for connected regions
         density_connected = pm.TruncatedNormal.dist(mu=mu, sigma=sigma, lower=0)
 
-        # Use MutableData to allow changing observed data without recompiling the model
+        # Use Data to allow changing observed data without recompiling the model
         if observed is not None:
-            density_data = pm.MutableData("density_data", observed)
+            density_data = pm.Data("density_data", observed)
         else:
             # For prior predictive, initialize with empty array
-            density_data = pm.MutableData("density_data", np.array([]))
+            density_data = pm.Data("density_data", np.array([]))
 
         # Mixture of the twos
         density = pm.Mixture(
@@ -167,7 +167,7 @@ def prior_preditive_sampling(
         mu_prior_mean=mu_prior_mean,
         mu_prior_sigma=mu_prior_sigma,
     )
-    # For prior predictive sampling, the MutableData remains empty as initialized
+    # For prior predictive sampling, the Data remains empty as initialized
     with model:
         prior_samples = pm.sample_prior_predictive(draws=draws)
 
@@ -232,7 +232,7 @@ def fit_mixture_model(
         mu_prior_sigma=mu_prior_sigma,
     )
     with model:
-        # Set the MutableData
+        # Set the Data
         pm.set_data({"density_data": density_values})
 
         traces = []
