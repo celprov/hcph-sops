@@ -27,6 +27,42 @@ def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
         with open(pkl_file, "rb") as f:
             return pickle.load(f)
 
+    # Check if all values are zero to avoid fitting
+    if np.all(SC_matrices_flat[:, c] == 0.0):
+        print(f"Skipping fitting for edge {c} as it is constantly zero")
+        param_values = {
+            "pi0": {
+                "mean": 1.0,
+                "sd": np.nan,
+                "hdi_3%": np.nan,
+                "hdi_97%": np.nan
+            },
+            "lambda_exp": {
+                "mean": np.nan,
+                "sd": np.nan,
+                "hdi_3%": np.nan,
+                "hdi_97%": np.nan
+            },
+            "sigma": {
+                "mean": np.nan,
+                "sd": np.nan,
+                "hdi_3%": np.nan,
+                "hdi_97%": np.nan
+            },
+            "mu": 0.0
+        }
+        # Save parameter values to a pickle file
+        with open(pkl_file, "wb") as f:
+            pickle.dump(param_values, f)
+
+        # Save the time taken for fitting
+        time_taken = time.time() - start_time
+
+        with open(time_file, "a") as f:
+            f.write(f"{c},{time_taken:.2f}\n")
+
+        return param_values
+
     # Fit the Bayesian model to this edge repeated measures
     print(f"Fitting edge {c} of {SC_matrices_flat.shape[1]}")
     data_mean = np.mean(SC_matrices_flat[:, c])
@@ -50,7 +86,7 @@ def fit_edge(SC_matrices_flat, c, output_dir, time_file, mu_type="fixed"):
 
     summary = az.summary(trace, var_names=var_names)
     for var in var_names:
-        param_values[var] = summary.loc[var, "mean"]
+        param_values[var] = summary.loc[var].to_dict()
 
     # Save parameter values to a pickle file
     with open(pkl_file, "wb") as f:
