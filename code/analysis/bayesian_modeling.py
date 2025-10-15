@@ -134,12 +134,19 @@ def define_mixture_model(
         # Component 2: Truncated Normal for connected regions
         density_connected = pm.TruncatedNormal.dist(mu=mu, sigma=sigma, lower=0)
 
+        # Use MutableData to allow changing observed data without recompiling the model
+        if observed is not None:
+            density_data = pm.MutableData("density_data", observed)
+        else:
+            # For prior predictive, initialize with empty array
+            density_data = pm.MutableData("density_data", np.array([]))
+
         # Mixture of the twos
         density = pm.Mixture(
             "density",
             w=[pi0, 1 - pi0],
             comp_dists=[density_unconnected, density_connected],
-            observed=observed,
+            observed=density_data,
         )
 
         # Save the observed data for later use
@@ -166,6 +173,7 @@ def prior_preditive_sampling(
         mu_prior_mean=mu_prior_mean,
         mu_prior_sigma=mu_prior_sigma,
     )
+    # For prior predictive sampling, the MutableData remains empty as initialized
     with model:
         prior_samples = pm.sample_prior_predictive(draws=draws)
 
@@ -221,7 +229,7 @@ def fit_mixture_model(
     tuple
         (arviz.InferenceData, pm.Model, dict)
     """
-    # Load the model from define_mixture_model
+    # Create the model once outside the loop to avoid recompilation
     model, model_info = define_mixture_model(
         observed=density_values,
         mu_type=mu_type,
@@ -230,6 +238,9 @@ def fit_mixture_model(
         mu_prior_sigma=mu_prior_sigma,
     )
     with model:
+        # Set the MutableData
+        pm.set_data({"density_data": density_values})
+
         traces = []
         for i in range(repeat_fit):
             print(f"Fit {i} over {repeat_fit} in total...")
