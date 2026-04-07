@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-
+import logging
 
 def get_confounds_scanstsv(dataset_path):
     """
@@ -89,6 +89,7 @@ def get_iqms(
         session=iqms_df["bids_name"].str.extract(r"ses-(\w+)_"),
         modality=iqms_df["bids_name"].str.split("_").str[-1],
         task=iqms_df["bids_name"].str.extract(r"task-(\w+)_"),
+        echo=iqms_df["bids_name"].str.extract(r"echo-(\d+)_"),
     )
     # Keep only second echo
     if not iqms_df["echo"].isna().all():
