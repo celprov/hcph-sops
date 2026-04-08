@@ -32,6 +32,7 @@ nav:
       - Extracting functional connectivity: processing/functional-connectivity.md
     - Analysis:
       - Quality control task activation analysis: analysis/qct-activation.ipynb
+      - FC variability across scanners and paradigms: analysis/icc.ipynb
       - Calibrating regressor to flag HCPh T1w images for exclusion: analysis/qc-regressor-hcph.ipynb
       - Movie habituation in resting-state fMRI: analysis/fmri-variability.ipynb
       - Investigating T1w reliability: analysis/t1w-reliability.ipynb
