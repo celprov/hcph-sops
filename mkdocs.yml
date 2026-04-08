@@ -33,7 +33,7 @@ nav:
     - Analysis:
       - FC variability across scanners and paradigms: analysis/icc.ipynb
       - Movie habituation in resting-state fMRI: analysis/fmri-variability.ipynb
-      - Bayesian modeling of SC variability: analysis/bayesian_modeling_sc.ipynb
+      - Bayesian modeling of SC reliability: analysis/bayesian_modeling_sc.ipynb
       - Quality control task activation analysis: analysis/qct-activation.ipynb
       - Calibrating regressor to flag HCPh T1w images for exclusion: analysis/qc-regressor-hcph.ipynb
       - Investigating T1w reliability: analysis/t1w-reliability.ipynb
