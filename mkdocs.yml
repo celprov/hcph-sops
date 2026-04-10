@@ -1,9 +1,9 @@
-site_name: "Standard Operating Procedures of the HCPh project"
+site_name: "HCPh's SOPs"
 site_description: Step-by-step instructions (standard operating procedures; SOPs) to replicate our Human Connectome PHantom project (HCPh)
 site_author: The AxonLab
 
 # Copyright
-copyright: Copyright © 2023
+copyright: © The AxonLab
 
 nav:
     - Home: index.md
@@ -31,6 +31,9 @@ nav:
       - Preprocessing: processing/preprocessing.md
       - Extracting functional connectivity: processing/functional-connectivity.md
     - Analysis:
+      - FC variability across scanners and paradigms: analysis/icc.ipynb
+      - Movie habituation in resting-state fMRI: analysis/fmri-variability.ipynb
+      - Bayesian modeling of SC reliability: analysis/bayesian_modeling_sc.ipynb
       - Quality control task activation analysis: analysis/qct-activation.ipynb
       - Calibrating regressor to flag HCPh T1w images for exclusion: analysis/qc-regressor-hcph.ipynb
       - Investigating T1w reliability: analysis/t1w-reliability.ipynb
@@ -53,6 +56,8 @@ nav:
 
 theme:
   name: material
+  font:
+    text: Urbanist
   palette:
     primary: black
   logo: assets/images/chuv_logo.svg
