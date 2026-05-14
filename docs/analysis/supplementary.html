@@ -298,6 +298,50 @@
           },
         ],
       },
+      clustering_fc: {
+        id: "clustering_fc",
+        label: "Within-Scanner Clustering (FC)",
+        tabs: [
+          {
+            id: "clusteringFcConfevolv",
+            title: "Confound Evolution",
+            ext: "svg",
+            build: (p) =>
+              `sub-001_task-rsmovie_scale-${p.scale}_fdthresh-${p.fdthresh}_meas-${p.meas}_exp-clusteringfc_conf-${p.clust_fc_conf}_viz-confevolv_bold.svg`,
+            controls: ["scale", "fdthresh_fmri", "meas", "clustering_fc_conf"],
+          },
+          {
+            id: "clusteringFcResdendrogram",
+            title: "Dendrogram & t-SNE Results",
+            ext: "svg",
+            build: (p) =>
+              `sub-001_task-rsmovie_scale-${p.scale}_fdthresh-${p.fdthresh}_meas-${p.meas}_exp-clusteringfc_conf-${p.clust_fc_conf}_viz-resdendrogramtsne_bold.svg`,
+            controls: ["scale", "fdthresh_fmri", "meas", "clustering_fc_conf"],
+          },
+        ],
+      },
+      clustering_sc: {
+        id: "clustering_sc",
+        label: "Within-Scanner Clustering (SC)",
+        tabs: [
+          {
+            id: "clusteringScConfevolv",
+            title: "Confound Evolution",
+            ext: "svg",
+            build: (p) =>
+              `sub-001_task-rsmovie_scale-${p.scale}_fdthresh-${p.fdthresh}_exp-clusteringsc_conf-${p.clust_sc_conf}_viz-confevolv_bold.svg`,
+            controls: ["scale", "fdthresh_fmri", "clustering_sc_conf"],
+          },
+          {
+            id: "clusteringScResdendrogram",
+            title: "Dendrogram & t-SNE Results",
+            ext: "svg",
+            build: (p) =>
+              `sub-001_scale-${p.scale}_fdthresh-${p.fdthresh}_exp-clusteringsc_conf-${p.clust_sc_conf}_viz-resdendrogramtsne_dwi.svg`,
+            controls: ["scale", "fdthresh_fmri", "clustering_sc_conf"],
+          },
+        ],
+      },
     };
 
     /** On-disk typo: conf-day + edgewise uses viz-edgewiseres instead of viz-edgewisevar */
@@ -349,6 +393,28 @@
           <option value="pedir">Phase-encoding direction (legacy tag: pedir)</option>
           <option value="caffeine2h">Caffeine (last 2h)</option>
           <option value="caffeine24h">Caffeine (last 24h)</option>
+        </select>`,
+      },
+      clustering_fc_conf: {
+        html: `<label>Confound / grouping</label><select data-k="clust_fc_conf" class="param">
+          <option value="coffee24h">Coffee (24h)</option>
+          <option value="coffee2h">Coffee (2h)</option>
+          <option value="day">Day of week</option>
+          <option value="fd">Framewise Displacement</option>
+          <option value="pe_dir">Phase-encoding direction</option>
+          <option value="roomtemp">Room temperature</option>
+          <option value="time">Time of day</option>
+        </select>`,
+      },
+      clustering_sc_conf: {
+        html: `<label>Confound / grouping</label><select data-k="clust_sc_conf" class="param">
+          <option value="coffee24h">Coffee (24h)</option>
+          <option value="coffee2h">Coffee (2h)</option>
+          <option value="day">Day of week</option>
+          <option value="fd">Framewise Displacement</option>
+          <option value="pe_dir">Phase-encoding direction</option>
+          <option value="roomtemp">Room temperature</option>
+          <option value="time">Time of day</option>
         </select>`,
       },
     };
