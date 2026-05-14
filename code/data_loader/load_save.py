@@ -24,21 +24,22 @@
 
 import os
 import re
+import logging
+import json
 import os.path as op
 import pandas as pd
-from collections import defaultdict
-import logging
-from typing import Optional, Union
-
-from bids import BIDSLayout
+import nibabel as nib
 import numpy as np
 
+from collections import defaultdict
+from typing import Optional, Union
 from pandas import read_csv
 from nibabel import loadsave
-from bids.layout import parse_file_entities
+from bids.layout import BIDSLayout, BIDSLayoutIndexer, add_config_paths, parse_file_entities
 from bids.layout.writing import build_path
 from nilearn.datasets import fetch_atlas_difumo
 from nilearn.interfaces.fmriprep.load_confounds import _load_single_confounds_file
+
 
 FC_PATTERN: list = [
     "sub-{subject}[/ses-{session}]/func/sub-{subject}"
@@ -49,7 +50,7 @@ FC_FILLS: dict = {"suffix": "connectivity", "extension": ".tsv"}
 
 TIMESERIES_PATTERN: list = [
     "sub-{subject}[/ses-{session}]/func/sub-{subject}"
-    "[_ses-{session}][_task-{task}][_fdthresh-{fdthresh}][_desc-{desc}]"
+    "[_ses-{session}][_task-{task}][_scale-{scale}][_fdthresh-{fdthresh}][_desc-{desc}]"
     "_{suffix}{extension}"
 ]
 TIMESERIES_FILLS: dict = {"desc": "denoised", "extension": ".tsv"}
@@ -203,7 +204,7 @@ def get_bids_savename(filename: str, patterns: list, **kwargs) -> str:
     return str(bids_savename)
 
 
-def get_atlas_data(atlas_name: str = "DiFuMo", **kwargs) -> dict:
+def get_atlas_data(atlas_name: str = "DiFuMo", remove_csf_comp = True, **kwargs) -> dict:
     """Fetch the specifies atlas filename and data.
 
     Parameters
@@ -224,7 +225,33 @@ def get_atlas_data(atlas_name: str = "DiFuMo", **kwargs) -> dict:
             "certain you want to deviate from those optimized modes? "
         )
 
-    return fetch_atlas_difumo(legacy_format=False, **kwargs)
+    atlas = fetch_atlas_difumo(legacy_format=False, **kwargs)
+
+    if remove_csf_comp:
+        logging.info(
+            "Removing CSF-specific components from the atlas. "
+        )
+        # Remove components that are specific to CSF, ventricles and sinuses from the atlas
+        csf_indices = [i for i, label in enumerate(atlas["labels"]["difumo_names"]) if "Cerebrospinal fluid" in label]
+        csf_typo_indices = [i for i, label in enumerate(atlas["labels"]["difumo_names"]) if "Cererbrospinal fluid" in label]
+        ventricles_indices = [i for i, label in enumerate(atlas["labels"]["difumo_names"]) if "ventricle" in label]
+        sinus_indices = [i for i, label in enumerate(atlas["labels"]["difumo_names"]) if "sinus" in label]
+        exclude_indices = csf_indices + csf_typo_indices + ventricles_indices + sinus_indices
+        # Load the atlas NIfTI file
+        atlas_img = nib.load(atlas["maps"])
+        
+        if exclude_indices:
+            all_indices = np.arange(atlas_img.shape[-1])
+            keep_indices = np.setdiff1d(all_indices, exclude_indices)
+            # Create a new NIfTI image with the excluded components removed
+            atlas_img = nib.Nifti1Image(atlas_img.get_fdata()[..., keep_indices], atlas_img.affine, atlas_img.header)
+            atlas_name = atlas["maps"].replace("maps", "maps_no_csf")
+            nib.save(atlas_img, atlas_name)
+            atlas["maps"] = atlas_name
+            # Remove excluded labels
+            atlas["labels"] = atlas["labels"].drop(exclude_indices) 
+
+    return atlas
 
 
 def find_atlas_dimension(path: str, atlas_name: str = "DiFuMo") -> int:
@@ -248,8 +275,16 @@ def find_atlas_dimension(path: str, atlas_name: str = "DiFuMo") -> int:
     if dimension_match:
         return int(dimension_match.group(1))
     else:
+        # We now store the value of the atlas dimension in a BIDS entity
+        # Traverse the directory to find files matching the pattern
+        for root, _, files in os.walk(path):
+            for file in files:
+                if re.match(rf".*_scale-(\d+).*_connectivity\.tsv", file):
+                    dimension_match = re.search(r"_scale-(\d+)", file)
+                    if dimension_match:
+                        return int(dimension_match.group(1))
         raise ValueError(
-            f"The output path {path} does not contain the expected pattern: {atlas_name} followed by digits."
+            f"The output path {path} does not contain any of the expected patterns: {atlas_name} followed by digits or the scale BIDS entity."
         )
 
 
@@ -543,3 +578,116 @@ def save_output(
         logging.debug(f"Saving data of type {type(data)} to: {saveloc}")
         os.makedirs(op.dirname(saveloc), exist_ok=True)
         np.savetxt(saveloc, data, delimiter="\t")
+
+## Helper functions to save figures and associated captions
+def init_save_layout(code_path, suppl_path):
+    # The BIDS save layout still needs to be initialized for saving figures/captions
+    config_path = code_path / "code/data_loader/indexer.json"
+    try:
+        add_config_paths(hcph=config_path)
+    except ValueError as e:
+        if "Configuration 'hcph' already exists" in str(e):
+            print("Configuration 'hcph' already exists, skipping add_config_paths.")
+        else:
+            raise e
+    _indexer = BIDSLayoutIndexer(
+        config_filename=config_path,
+        index_metadata=False,
+        validate=False,
+    )       
+    return BIDSLayout(suppl_path, config="hcph", indexer=_indexer, validate=False)
+    
+def save_caption(caption, save_layout, entities):
+    """
+    Save the figure caption to a JSON file.
+    
+    Parameters:
+    - caption: The caption text to save.
+    - save_layout: A BIDSLayout object for saving the caption.
+    - entities: A dictionary containing BIDS entities for the filename.
+    """
+    # Update the entities to use .json extension
+    entities['extension'] = '.json'
+    json_save_path = save_layout.build_path(entities, validate=False)
+
+    # Save the caption to a JSON file
+    caption_data = {"caption": caption}
+    with open(json_save_path, 'w') as json_file:
+        json.dump(caption_data, json_file)
+
+def load_matrices(
+    matrices_path,
+    entities_base,
+    code_path
+):
+    """
+    Load and concatenate the connectivity matrices (functional or structural) from BIDS dataset.
+
+    Parameters
+    ----------
+    matrices_path : Path or str
+        Path to the directory where the connectivity matrices are stored.
+    entities_base : dict
+        Dictionary of BIDS entities to filter the files (e.g. {'subject': ..., 'task': ..., 'measure': ..., 'scale': ..., 'fd_threshold': ...}).
+    code_path : Path or str
+        Path to the directory containing code resources (e.g., indexer.json config). 
+
+    Returns
+    -------
+    dict with keys:
+        - 'conn_concat': np.ndarray, shape=(n_pairs, n_sessions), concatenated and flattened upper triangle of connectivity matrices
+        - 'conn_matrix': np.ndarray, shape=(n_regions, n_regions), an example of a connectivity matrix
+        - 'files': list, list of file paths to the individual connectivity matrix .tsv files loaded from the BIDS dataset
+        - 'atlas_labels': pd.DataFrame, dataframe indicating region labels and corresponding network according to Yeo et al. 2011 atlas
+        - 'region_labels': list, list of region names extracted from atlas_labels
+        - 'conn_size': int, number of brain regions
+        - 'ses_index': list, list of session identifiers matched to the files
+   
+    """
+    # Extract BIDS filter parameters from entities_base
+    metric = entities_base.get("measure")  # key is 'measure' here
+    atlas_dimension = entities_base.get("scale")  # key is 'scale'
+
+    config_path = code_path / "code/data_loader/indexer.json"
+    try:
+        add_config_paths(hcph=config_path)
+    except ValueError as e:
+        if "Configuration 'hcph' already exists" in str(e):
+            print("Configuration 'hcph' already exists, skipping add_config_paths.")
+        else:
+            raise e
+    _indexer = BIDSLayoutIndexer(
+        config_filename=config_path,
+        index_metadata=False,
+        validate=False,
+    )
+    layout = BIDSLayout(matrices_path, config="hcph", indexer=_indexer, validate=False)
+
+    files = layout.get(**entities_base, suffix='connectivity', extension='.tsv', return_type='file')
+    ses_index = [tsv.split('ses-')[1].split('/')[0] for tsv in files]
+
+    conn_matrices = []
+    for file in files:
+        conn_matrix = pd.read_csv(file, sep='\t', header=None)
+        if metric == "sparseinversecovariance":
+            conn_matrix = -conn_matrix
+        conn_matrices.append(conn_matrix.values[np.triu_indices_from(conn_matrix, k=0)])
+
+    conn_size = conn_matrix.shape[0]
+    conn_concat = np.vstack(conn_matrices)
+
+    # Load region labels
+    atlas_data = get_atlas_data(dimension=int(atlas_dimension))
+    atlas_labels = getattr(atlas_data, "labels")
+    region_labels = atlas_labels["difumo_names"]
+    assert len(region_labels) == conn_size, f"Expected {conn_size} region labels, got {len(region_labels)}"
+
+    return {
+        "conn_concat": conn_concat,
+        "conn_matrix": conn_matrix,
+        "files": files,
+        "atlas_labels": atlas_labels,
+        "region_labels": region_labels,
+        "conn_size": conn_size,
+        "ses_index": ses_index,
+    }

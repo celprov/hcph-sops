@@ -114,7 +114,132 @@ When a new session is added, your *DataLad* dataset will remain at the same poin
 
         ``` shell
         find sub-001/ses-pilot019 -name "*.json" -or -name "*.tsv" -or -name "*.bvec" -or -name "*.bval" | \
-            xargs datalad save -m '"add(pilot019): new session metadata (JSON, TSV, bvec/bval)"'
+            xargs datalad save -m --to-git '"add(pilot019): new session metadata (JSON, TSV, bvec/bval)"'
         ```
+
+## Preparing derivative subdatasets
+
+*Datalad*'s datasets modularity can be leveraged with derivatives.
+Instead of creating a monolithic and large dataset for all derivatives, we will create datasets for each of the derivatives and then aggregate them as subdatasets.
+The steps to create derivative subdatasets is similar to those of the original dataset.
+To make this documentation generalize across different derivative sets, we will first set a variable with the derivative set name.
+In this case, the steps are demonstrated for the outputs of *sMRIPrep*.
+
+- [ ] Initiate the derivative dataset:
+    ```Bash
+    export DERIVS_REPO=smriprep
+    datalad create -c bids hcph-${DERIVS_REPO}
+    cd hcph-${DERIVS_REPO}
+    ```
+
+- [ ] Create the RIA store:
+    ``` shell title="Creating a RIA sibling to store large files"
+    datalad create-sibling-ria -s ria-storage --alias hcph-${DERIVS_REPO} \
+            --new-store-ok --storage-sibling=only \
+            "ria+ssh://{{ secrets.login.curnagl_ria | default('<username>') }}@curnagl.dcsr.unil.ch:{{ secrets.data.curnagl_ria_store_derivs | default('<absolute-path-of-store>') }}"
+    ```
+
+    ??? bug "Getting `[ERROR ] 'SSHRemoteIO' ...`"
+
+        If you encounter:
+
+        ```Text
+        [ERROR ] 'SSHRemoteIO' object has no attribute 'url2transport_path'
+        ```
+
+        Type in the following *Git* configuration ([datalad/datalad-next#754](https://github.com/datalad/datalad-next/issues/754)):
+
+        ```Bash
+        git config --global --add datalad.extensions.load next
+        ```
+
+- [ ] Configure the GitHub sibling:
+
+    === "When the GitHub repo doesn't exist yet"
+
+        ``` shell
+        datalad create-sibling-github --dataset . -s github --existing error \
+                --access-protocol https-ssh --private \
+                --description "HCPh Derivatives: ${DERIVS_REPO}" \
+                --publish-depends ria-storage \
+                {{ secrets.data.gh_derivs_repo | default('<organization>/<repo_name>') }}
+        ```
+
+        If successfull, the output in this case should be something like:
+
+        ``` Text
+        create_sibling_github(ok): [sibling repository 'github' created at https://github.com/<organization>/<repo_name>]
+        configure-sibling(ok): . (sibling)
+        action summary:
+          configure-sibling (ok: 1)
+          create_sibling_github (ok: 1)
+        ```
+
+        The repository should exist now in *GitHub*.
+
+    === "When the GitHub repo has been manually created"
+
+        ``` shell
+        datalad siblings add --dataset . --name github \
+                --pushurl git@github.com:{{ secrets.data.gh_derivs_repo | default('<organization>/<repo_name>') }}.git \
+                --url https://github.com/{{ secrets.data.gh_derivs_repo | default('<organization>/<repo_name>') }}.git \
+                --publish-depends ria-storage
+        ```
+
+- [ ] Push the configuration to the `github` sibling:
+    ``` shell
+    datalad push --to=github
+    ```
+
+    The output should be something like:
+
+    ``` Text
+    publish(ok): . (dataset) [refs/heads/master->github:refs/heads/master [new branch]]
+    publish(ok): . (dataset) [refs/heads/git-annex->github:refs/heads/git-annex [new branch]]
+
+    action summary:
+       publish (ok: 2)
+    ```
+
+- [ ] Check that `master` is the default branch in the repository settings (in this case: [https://github.com/{{ secrets.data.gh_derivs_example_repo | default('<organization>/<repo_name>') }}/settings](https://github.com/{{ secrets.data.gh_derivs_example_repo | default('<organization>/<repo_name>') }}/settings))
+
+## Nesting derivatives datasets
+
+With the structure of derivatives we have defined above, we will then nest datalad datasets to obtain consistent global derivatives.
+For example, let's nest the *FreeSurfer* derivatives into the `sourcedata/freesurfer` folder of the *fMRIPrep* derivatives of the piloting sessions with the reliability protocol.
+
+- [ ] Change directory into the *superdataset* folder, ensure it's updated, and create a new branch (for caution)
+    ``` shell
+    export TOP_REPO=fmriprep-reliability-pilot
+    export DERIVS_REPO=freesurfer-reliability-pilot
+
+    cd hcph-${TOP_REPO}
+    datalad update --how ff-only
+    git checkout -b add/freesurfer-subdataset master
+    ```
+
+- [ ] Install the subdataset (in this case into `sourcedata/freesurfer`)
+    ``` shell
+    datalad install -d . \
+                    -s https://github.com/{{ secrets.data.gh_derivs_repo | default('<organization>/<repo_name>') }}.git \
+                    sourcedata/freesurfer
+    ```
+
+- [ ] Push the changes to the super-dataset:
+    ``` shell
+    datalad push --to=github
+    ```
+
+- [ ] Visit the *superdataset*'s *GitHub* repository:
+    - [ ] Create a pull-request (PR)
+    - [ ] Review the PR
+    - [ ] Merge the PR
+
+- [ ] Back to the host for data management, update the dataset:
+    ``` shell
+    cd hcph-${TOP_REPO}  # if necessary
+    git checkout master
+    datalad update --how ff-only
+    ```
 
 [1]: https://doi.org/10.5281/zenodo.808846 "Hanke, Michael, et al. “Datalad.” Open Source Software, 2021. doi:10.5281/zenodo.808846"

@@ -23,8 +23,9 @@ python funconn.py path_to_dataset/derivatives/fmriprep-23.1.4
     When using the default options, the pipeline will (in this order and for all functional tasks):
     
     - [ ] Fetch the [DiFuMo](https://doi.org/10.1016/j.neuroimage.2020.117126) atlas (64 dimensions)
+    - [ ] Removes from the atlas the components that are specific to CSF, ventricles, and sinuses, as those regions are not of interest for connectivity estimation (2 regions removed at scale 64, 9 at scale 128, and 30 at scale 512).
     - [ ] Extract the region-wise averaged timeseries
-    - [ ] Find high motion volumes that have framewise displacement higher than 0.4 mm or higher than 5 standardized DVAR.
+    - [ ] Find high motion volumes that have framewise displacement higher than 0.5 mm or higher than 5 standardized DVAR.
     Then also flag as outlier the segments that are shorter than 5 timepoints.
     - [ ] Interpolate high motion volumes with cubic spline interpolation
     - [ ] Apply a low-pass butterworth filter (cutoff frequency of 0.15 Hz)
@@ -66,6 +67,7 @@ In the end, the data structure will look like this:
 │               └── ses-15
 │                   └── func
 ```
+Note that an alternative output directory can be specified using the `--output` flag.
 
 ## QA/QC of functional connectivity
 

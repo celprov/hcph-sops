@@ -117,7 +117,7 @@ When HPC is planned for processing, *DataLad* will be required on that system(s)
 
 - [ ] Create a new environment called `datamgt` with *Git annex* in it:
     ```Bash
-    micromamba create -n datamgt python=3.12 git-annex=*=alldep*
+    micromamba create -n datamgt -c conda-forge python=3.12 git-annex=*=alldep*
     ```
 - [ ] Activate the environment
     ```Bash
