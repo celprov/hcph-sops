@@ -7,6 +7,11 @@ All notable changes to these SOPs are documented below, starting with the most r
 	If you have identified a problem, a typo, or something missing, and you know it is not in our tracker, please report it by [creating a new issue](https://github.com/TheAxonLab/hcph-protocol/issues/new).
 
 <!-- insertion marker -->
+## Unreleased
+
+### Documentation
+- Add detailed checklist for releasing data.
+
 ## [0.4.0](https://github.com/TheAxonLab/hcph-protocol/releases/tag/0.4.0) (September 27, 2023)
 
 <small>[Compare with 0.3.0](https://github.com/TheAxonLab/hcph-protocol/compare/0.3.0...0.4.0)</small>
