@@ -1,0 +1,15 @@
+# Pinned dependency set used to BUILD the documentation site (CI: deploy.yml).
+# Keep this reproducible: exact pins only. Notebooks are rendered from stored
+# outputs (mkdocs-jupyter execute=False), so the scientific/analysis stack is
+# NOT needed here -- it lives in requirements.txt.
+#
+# NOTE: the old mkpdfs-mkdocs-plugin (unpinned @master git fork) and its
+# WeasyPrint<53 dependency were removed: the `mkpdfs` plugin is disabled in
+# mkdocs.yml and the fork is an unmaintained supply-chain liability.
+markdown-include==0.8.1
+mkdocs==1.6.1
+mkdocs-jupyter==0.26.3
+mkdocs-macros-plugin==1.5.0
+mkdocs-material==9.7.6
+pymdown-extensions==10.16.1
+Pygments==2.19.2

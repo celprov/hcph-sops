@@ -56,6 +56,7 @@ nav:
 
 theme:
   name: material
+  custom_dir: overrides
   font:
     text: Urbanist
   palette:
@@ -139,5 +140,7 @@ extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
+  # Local MathJax 3 configuration; loads before the MathJax library.
+  # The library itself is injected with a pinned version + SRI hash in
+  # overrides/main.html (MkDocs cannot set an `integrity` attribute here).
   - js/mathjax.js
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
