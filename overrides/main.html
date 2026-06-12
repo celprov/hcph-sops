@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{#
+  Load the MathJax 3 library from a pinned jsDelivr URL with Subresource
+  Integrity (SRI). MkDocs' `extra_javascript` cannot express an `integrity`
+  attribute, so the library is injected here instead. The local MathJax
+  configuration (`js/mathjax.js`) is still loaded via `extra_javascript`
+  and runs first, before this library script (appended after `super()`).
+
+  Do NOT reintroduce polyfill.io here: that domain was sold in 2024 and
+  began serving malware. MathJax 3 needs no polyfill on supported browsers.
+#}
+{% block scripts %}
+  {{ super() }}
+  <script
+    src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"
+    integrity="sha512-tiaNmAzpy3KcgtuiLwT9WSlSsqGqtDB5ylMwxoqG5ysNIyzkBw24k6UFTuXGgyXJLJ8aM/ho1h67NRKedPx++Q=="
+    crossorigin="anonymous"></script>
+{% endblock %}
