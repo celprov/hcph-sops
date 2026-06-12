@@ -96,7 +96,7 @@ To support backward compatibility (and some extra, currently unsupported feature
 
         ``` text
 {% filter indent(width=8) %}
-{% include 'code/bids/example01.txt' %}
+{% include 'code/data_loader/example01.txt' %}
 {% endfilter %}
         ```
 
@@ -106,7 +106,7 @@ To support backward compatibility (and some extra, currently unsupported feature
 
         ``` text
 {% filter indent(width=8) %}
-{% include 'code/bids/example02.txt' %}
+{% include 'code/data_loader/example02.txt' %}
 {% endfilter %}
         ```
 
