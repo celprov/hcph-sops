@@ -119,7 +119,7 @@ Several tubes and cables will be now hanging from the access cylinder at the Sca
             - [ ] Under the tab *Analog*, click on *Add new module*.
             - [ ] Find the name of the BIOPAC unit corresponding to the <mark>ECG100C</mark>.
             - [ ] Set the module settings (gain, filters, etc.) corresponding to those of the configuration switches in the front of the module.
-            - [ ] When prompted to enter [calibration?], for the ECG you should map the interval ?? to ??.
+            - [ ] When prompted to enter the calibration points, map the interval [-5, 5] to [0, 10].
         - [ ] Add the GA module
             - [ ] Confirm that the CO<sub>2</sub> output of the GA is connected through the ANISO filter to the **channel 3** of the AMI100C module.
             - [ ] Under the tab *Analog*, click on *Add new module*.
